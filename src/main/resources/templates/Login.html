@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html th:replace="~{Layout/mainLayout :: layout(~{::title},~{::content},true)}" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title th:fragment="title">Login</title>
+</head>
+    <body>
+     <div th:fragment="content" class = "d-flex vw-100 vh-100 p-3 flex-column justify-content-center align-items-center" >
+            <div class= "text-center mx-auto dark mb-4">
+                <form th:action="@{/loginValidate}" method="post" >
+                    <img class="mb-4 img-fluid" th:src="@{images/yuumbread.svg}" alt="" width="156" height="88">
+                    <h1 class="h3 mb-4 fw-normal display-5">Logowanie</h1>
+
+                    <div class="form-floating">
+                        <input type="login" class="form-control" name='loginInput' maxlength="20" id="loginInput" placeholder="Login">
+                        <label for="loginInput">Login</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" name='passwordInput' maxlength="45" id="passwordInput" placeholder="Password">
+                        <label for="passwordInput">Hasło</label>
+                    </div>
+
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" value="remember-me"> Zapamiętaj mnie
+                        </label>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Zaloguj</button>
+
+                </form>
+
+            </div>
+
+            <!--Messages-->
+            <div th:insert="~{Components/messages :: messagesDisplayer(${atr_alertList})}" class= "text-center  mx-auto dark ">
+            </div>
+        </div>
+    </body>
+</html>

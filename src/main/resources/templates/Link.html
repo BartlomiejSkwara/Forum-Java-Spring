@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <a th:fragment="linkComponenet"  th:href="@{${atr_link}}">Linczek :3</a>
+    <a th:fragment="parametrizedLink(mylink,message)" th:href="@{${mylink}}" th:text="${message}">Linczek :3</a>
+  </body>
+
+
+</html>
+

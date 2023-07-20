@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html th:replace="~{Layout/mainLayout :: layout(~{::title}, ~{::content}, false)}" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title th:fragment="title">Home</title>
+</head>
+<body>
+<section th:fragment="content">
+    <button type="button" class="btn btn-primary">Primary</button>
+
+    <h3 th:assert="${atr_number}==23">Dude it's header time</h3>
+    <p th:text="${atr_importantValue.interStellarEngine()}"></p>
+        sus
+    <hr/>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">LVL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="person: ${atr_unitsList}">
+                <td th:text="${person.name()}"></td>
+                <td th:text="${person.lvl() }"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:insert="~{ Link :: linkComponenet}"></div>
+    <div th:replace="~{Link::parametrizedLink(${atr_link},bruh)}"></div>
+</section>
+
+</body>
+</html>

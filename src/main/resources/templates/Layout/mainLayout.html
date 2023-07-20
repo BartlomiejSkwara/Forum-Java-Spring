@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html th:fragment="layout(title,content,onlyBody)" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title th:replace="${title}"></title>
+
+        <link rel="stylesheet" th:href="@{css/bootstrap.min.css}">
+        <link rel="stylesheet" th:href="@{css/extended-bootstrap.css}">
+
+        <link rel="icon" type="image/x-icon" th:href="@{images/yuumicon.png}">
+
+    </head>
+    <body>
+
+
+    <th:block th:if="${onlyBody==null or onlyBody==false}">
+        <header  th:replace="~{Layout/header.html::header}"></header>
+    </th:block>
+
+
+
+
+    <th:block th:if="${onlyBody==null or onlyBody==false}">
+        <div th:insert="${content}" class = "d-flex pt-5 mt-5 mx-auto col-12 col-sm-9 flex-column main-content"></div>
+    </th:block>
+    <th:block th:if="${not (onlyBody==null or onlyBody==false)}">
+        <div th:replace="${content}"></div>
+    </th:block>
+
+
+
+    <th:block th:if="${onlyBody==null or onlyBody==false}">
+        <footer th:replace="~{Layout/footer.html::footer}"></footer>
+    </th:block>
+
+    <script th:src="@{js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{js/myJS/functions.js}"></script>
+
+    </body>
+</html>
+

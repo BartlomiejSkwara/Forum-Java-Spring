@@ -1,0 +1,129 @@
+.button-small{
+    width: 42;
+    height: 30;
+    
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex-grow: 1;
+}
+
+.footer {
+  flex-shrink: 0;
+}
+
+.nonResizable{
+    resize: none;
+}
+
+.w-90 {
+    width: 90%!important;
+}
+
+.no-scroll {
+  resize: none;
+
+}
+
+.start-75 {
+    left: 75%!important;
+}
+
+.start-80 {
+    left: 80%!important;
+}
+.start-85 {
+    left: 85%!important;
+}
+.start-90 {
+    left: 90%!important;
+}
+
+.start-95 {
+    left: 95%!important;
+}
+
+.top-20 {
+    top: 20%!important;
+}
+
+.top-10 {
+    top: 10%!important;
+}
+.top-90 {
+    top: 90%!important;
+}
+
+.top-95 {
+    top: 95%!important;
+}
+
+.image-flip {
+    transform: rotateY(180deg)
+}
+
+.badge-outline-danger{
+    --bs-btn-hover-bg:#dca235;
+
+}
+
+.border-dots{
+    border-style: dashed;
+}
+
+.btn-outline-susgare{
+    --bs-btn-color: #dc3545;
+    --bs-btn-border-color:#dc3545;
+    --bs-btn-hover-color:#fff;
+    --bs-btn-hover-bg:#dc3545;
+    --bs-btn-hover-border-color:#dc3545;
+    --bs-btn-focus-shadow-rgb:220,53,69;
+    --bs-btn-active-color:#fff;
+    --bs-btn-active-bg:#dc3545;
+    --bs-btn-active-border-color:#dc3545;
+    --bs-btn-active-shadow:inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color:#dc3545;--bs-btn-disabled-bg:transparent;
+    --bs-btn-disabled-border-color:#dc3545;
+    --bs-gradient:none
+}
+
+.table-black{
+/*    --bs-bg-opacity: 1;
+    background-color:
+    */
+    --bs-table-color: #fff;
+    /*#000000*/
+    
+    --bs-table-bg:  rgba(0,0,0,1)!important;
+    --bs-table-border-color: #373b3e;
+    --bs-table-striped-bg: #2c3034;
+    --bs-table-striped-color: #fff;
+    --bs-table-active-bg: #373b3e;
+    --bs-table-active-color: #fff;
+    --bs-table-hover-bg: #323539;
+    --bs-table-hover-color: #fff;
+    color: var(--bs-table-color);
+    border-color: var(--bs-table-border-color);
+    
+}
+
+
+.border-custom:hover{
+    --bs-border-opacity: 1;
+    border-color: rgba(var(--bs-white-rgb),var(--bs-border-opacity))!important;
+}
+
+
+.bg-activeUser {
+    --bs-bg-opacity: 1;
+    background-color: rgb(50,58,67)!important;
+}
+.border-activeUser {
+    --bs-border-opacity: 1;
+    border-color: rgb(180,180,180)!important;
+}

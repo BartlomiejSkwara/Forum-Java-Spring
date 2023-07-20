@@ -1,0 +1,74 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+</head>
+<body>
+    <div th:fragment="header" >
+        <nav class="navbar navbar-expand-sm fixed-top bg-black border-bottom " style="border-bottom: 2px var(--bs-border-style) grey !important">
+            <div class="container-fluid">
+                <a class="navbar-brand" th:href="@{/}">
+                    <img src="" th:src="@{images/yuumbread.svg}" class="image-flip me-3" width="59" height="33" alt="">
+                    Forum
+                </a>
+                <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse" id="navbarCollapse" style="">
+
+
+<!--                    \core\RoleUtils::inRole("admin");-->
+
+                    <ul class="navbar-nav ms-auto mb-2 mb-md-0 navbar-nav-scroll">
+<!--                            <li class="nav-item">-->
+<!--                        <a class="nav-link active" aria-current="page" href="#">Kategorie</a>-->
+<!--                    </li>-->
+
+<!--                                <li class="nav-item">-->
+<!--                        <a class="nav-link" href="#">#</a>-->
+<!--                    </li><li class="nav-item">-->
+<!--                        <a class="nav-link" href="#">#</a>-->
+<!--                    </li>-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link" href="#">#</a>-->
+<!--                        </li>-->
+
+                        <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxTutaj będzie sprawdzenie roli gdy dodam securityxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-->
+<!--                        {if \core\RoleUtils::inRole("user")}-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link " href="">{\core\SessionUtils::load("username",true)}</a>-->
+<!--                        </li>-->
+
+<!--                        <li class="nav-item">-->
+<!--                            <a type="button" class="btn btn-outline-danger" href = "{url action='logout'}" >Wyloguj</a>-->
+<!--                        </li>-->
+<!--                        {else}-->
+                        <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxTa sekcja tylko dla zalogowanegoxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-->
+
+<!--                        a tutaj dla niezalogowanych-->
+                        <li class="nav-item {*me-1*}">
+                            <a type="button" class="btn btn-outline-primary" th:href = "@{/login}">Zaloguj</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href=""></a>
+                        </li>
+
+
+
+
+                        <li class="nav-item">
+                            <a type="button" class="btn btn-success" th:href = "@{/register}" >Zarejestruj</a>
+                        </li>
+
+
+<!--                        {/if}-->
+                    </ul>
+
+
+
+                </div>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>
