@@ -1,5 +1,5 @@
 <!DOCTYPE html >
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 </head>
 <body>
@@ -16,52 +16,48 @@
                 <div class="navbar-collapse collapse" id="navbarCollapse" style="">
 
 
-<!--                    \core\RoleUtils::inRole("admin");-->
+
+
 
                     <ul class="navbar-nav ms-auto mb-2 mb-md-0 navbar-nav-scroll">
-<!--                            <li class="nav-item">-->
-<!--                        <a class="nav-link active" aria-current="page" href="#">Kategorie</a>-->
-<!--                    </li>-->
+                        <th:block sec:authorize="isAuthenticated()" >
+        <!--                            <li class="nav-item">-->
+        <!--                        <a class="nav-link active" aria-current="page" href="#">Kategorie</a>-->
+        <!--                    </li>-->
 
-<!--                                <li class="nav-item">-->
-<!--                        <a class="nav-link" href="#">#</a>-->
-<!--                    </li><li class="nav-item">-->
-<!--                        <a class="nav-link" href="#">#</a>-->
-<!--                    </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="#">#</a>-->
-<!--                        </li>-->
+        <!--                                <li class="nav-item">-->
+        <!--                        <a class="nav-link" href="#">#</a>-->
+        <!--                    </li><li class="nav-item">-->
+        <!--                        <a class="nav-link" href="#">#</a>-->
+        <!--                    </li>-->
+        <!--                        <li class="nav-item">-->
+        <!--                            <a class="nav-link" href="#">#</a>-->
+        <!--                        </li>-->
 
-                        <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxTutaj będzie sprawdzenie roli gdy dodam securityxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-->
-<!--                        {if \core\RoleUtils::inRole("user")}-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link " href="">{\core\SessionUtils::load("username",true)}</a>-->
-<!--                        </li>-->
+                                <li class="nav-item">
+                                    <a class="nav-link " href="" sec:authentication="principal.username"></a>
+                                </li>
 
-<!--                        <li class="nav-item">-->
-<!--                            <a type="button" class="btn btn-outline-danger" href = "{url action='logout'}" >Wyloguj</a>-->
-<!--                        </li>-->
-<!--                        {else}-->
-                        <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxTa sekcja tylko dla zalogowanegoxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-->
+                                <li class="nav-item">
+                                    <form th:action="@{/logout}" method="post">
+                                        <button type="submit" class="btn btn-outline-danger">Wyloguj</button>
+                                    </form>
+                                </li>
 
-<!--                        a tutaj dla niezalogowanych-->
-                        <li class="nav-item {*me-1*}">
-                            <a type="button" class="btn btn-outline-primary" th:href = "@{/login}">Zaloguj</a>
-                        </li>
+                        </th:block>
+                        <th:block sec:authorize="isAnonymous()">
+                            <li class="nav-item {*me-1*}">
+                                <a type="button" class="btn btn-outline-primary" th:href = "@{/login}">Zaloguj</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href=""></a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href=""></a>
+                            </li>
 
-
-
-
-                        <li class="nav-item">
-                            <a type="button" class="btn btn-success" th:href = "@{/register}" >Zarejestruj</a>
-                        </li>
-
-
-<!--                        {/if}-->
+                            <li class="nav-item">
+                                <a type="button" class="btn btn-success" th:href = "@{/register}" >Zarejestruj</a>
+                            </li>
+                        </th:block>
                     </ul>
 
 
