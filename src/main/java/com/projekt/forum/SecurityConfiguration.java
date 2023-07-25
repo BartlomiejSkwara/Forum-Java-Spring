@@ -64,8 +64,8 @@ public class SecurityConfiguration {
     public AuthenticationProvider authenticationProvider(PasswordEncoder encoder){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         InMemoryUserDetailsManager  userDetailsService = new InMemoryUserDetailsManager();
-        userDetailsService.createUser(User.withUsername("Krisent").password(encoder.encode("123")).roles("USER").build());
-
+        userDetailsService.createUser(User.withUsername("Krisent").password(encoder.encode("123")).roles("user").build());
+        userDetailsService.createUser(User.withUsername("admin").password(encoder.encode("admin")).roles("admin").build());
         provider.setUserDetailsService(userDetailsService);
 
         return provider;
