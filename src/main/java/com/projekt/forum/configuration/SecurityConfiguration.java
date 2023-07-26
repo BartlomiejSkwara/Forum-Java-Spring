@@ -1,5 +1,8 @@
-package com.projekt.forum;
+package com.projekt.forum.configuration;
 
+import com.projekt.forum.entity.UserEntity;
+import com.projekt.forum.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Autowired UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider) throws Exception {
@@ -64,8 +68,11 @@ public class SecurityConfiguration {
     public AuthenticationProvider authenticationProvider(PasswordEncoder encoder){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         InMemoryUserDetailsManager  userDetailsService = new InMemoryUserDetailsManager();
-        userDetailsService.createUser(User.withUsername("Krisent").password(encoder.encode("123")).roles("user").build());
-        userDetailsService.createUser(User.withUsername("admin").password(encoder.encode("admin")).roles("admin").build());
+        for (UserEntity user:this.userRepository.joinUsersWithRole()){
+            userDetailsService.createUser(user);
+
+        }
+//        userDetailsService.createUser(User.withUsername("admin").password(encoder.encode("admin")).roles("admin").build());
         provider.setUserDetailsService(userDetailsService);
 
         return provider;

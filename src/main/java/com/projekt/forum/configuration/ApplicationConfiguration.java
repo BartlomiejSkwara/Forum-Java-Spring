@@ -1,4 +1,4 @@
-package com.projekt.forum;
+package com.projekt.forum.configuration;
 
 
 import org.springframework.context.annotation.Configuration;

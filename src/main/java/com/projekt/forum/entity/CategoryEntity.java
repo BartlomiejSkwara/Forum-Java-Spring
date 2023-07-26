@@ -7,20 +7,20 @@ import java.util.Objects;
 
 @Entity
 @Table(schema = "forum", name = "category")
-public class Category {
+public class CategoryEntity {
 
     @Id()
     @GeneratedValue(strategy = GenerationType.UUID )
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "idcategory" , length = 45)
-    String idcategory;
+    private String idcategory;
     @Column(name = "name", length = 45)
-    String name;
+    private String name;
 
     @Column(name = "description", length = 90)
-    String description;
+    private String description;
 
-    public Category(String idcategory, String name, String description) {
+    public CategoryEntity(String idcategory, String name, String description) {
         this.idcategory = idcategory;
         this.name = name;
         this.description = description;
@@ -50,7 +50,7 @@ public class Category {
         this.description = description;
     }
 
-    public Category(){
+    public CategoryEntity(){
 
     }
 
@@ -58,8 +58,8 @@ public class Category {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return Objects.equals(idcategory, category.idcategory) && Objects.equals(name, category.name) && Objects.equals(description, category.description);
+        CategoryEntity categoryEntity = (CategoryEntity) o;
+        return Objects.equals(idcategory, categoryEntity.idcategory) && Objects.equals(name, categoryEntity.name) && Objects.equals(description, categoryEntity.description);
     }
 
     @Override
