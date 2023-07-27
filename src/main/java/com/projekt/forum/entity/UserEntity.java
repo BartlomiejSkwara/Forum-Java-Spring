@@ -17,14 +17,14 @@ public class UserEntity implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return nonExpired == that.nonExpired && nonLocked == that.nonLocked && credentialsNonExpired == that.credentialsNonExpired && isEnabled == that.isEnabled && Objects.equals(id, that.id) && Objects.equals(authorities, that.authorities) && Objects.equals(password, that.password) && Objects.equals(username, that.username) && Objects.equals(creationDate, that.creationDate);
+        return nonExpired == that.nonExpired && nonLocked == that.nonLocked && credentialsNonExpired == that.credentialsNonExpired && isEnabled == that.isEnabled && Objects.equals(iduser, that.iduser) && Objects.equals(authorities, that.authorities) && Objects.equals(password, that.password) && Objects.equals(username, that.username) && Objects.equals(creationDate, that.creationDate);
     }
 
     public UserEntity(){
     }
 
     public UserEntity(Integer id, Collection<GrantedAuthorityEntity> role, String password, String username, Date creationDate, boolean nonExpired, boolean nonLocked, boolean credentialsNonExpired, boolean isEnabled) {
-        this.id = id;
+        this.iduser = id;
         this.authorities = role;
         this.password = password;
         this.username = username;
@@ -37,16 +37,15 @@ public class UserEntity implements UserDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, authorities, password, username, creationDate, nonExpired, nonLocked, credentialsNonExpired, isEnabled);
+        return Objects.hash(iduser, authorities, password, username, creationDate, nonExpired, nonLocked, credentialsNonExpired, isEnabled);
     }
 
     @Id()
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "userIDGen")
     @SequenceGenerator(name = "userIDGen", sequenceName = "userIDGen", initialValue = 34 )
-    @Column(name = "iduser")
-    private Integer id;
+    private Integer iduser;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     private Collection<GrantedAuthorityEntity> authorities;
 
     @Column(name = "password")
@@ -79,7 +78,7 @@ public class UserEntity implements UserDetails {
         return creationDate;
     }
 
-    public int getId(){return id;}
+    public int getId(){return iduser;}
     @Override
     public String getPassword() {
         return password;
@@ -111,12 +110,12 @@ public class UserEntity implements UserDetails {
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.iduser = id;
     }
 
 
     public void setAuthorities(GrantedAuthorityEntity role) {
-        this.authorities.add(role);
+        getAuthorities().add(role);
     }
 
 

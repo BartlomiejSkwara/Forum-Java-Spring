@@ -23,8 +23,8 @@ public class GrantedAuthorityEntity implements GrantedAuthority {
     private String role;
 
 
-    @ManyToOne()
-    @JoinColumn(name = "user_iduser")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "iduser")
     private UserEntity user;
 
     public GrantedAuthorityEntity(){}

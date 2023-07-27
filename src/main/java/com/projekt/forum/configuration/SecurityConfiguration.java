@@ -1,6 +1,7 @@
 package com.projekt.forum.configuration;
 
 import com.projekt.forum.entity.UserEntity;
+import com.projekt.forum.handlers.CustomUrlAuthenticationFailureHandler;
 import com.projekt.forum.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +13,13 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +28,11 @@ public class SecurityConfiguration {
     @Autowired UserRepository userRepository;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider) throws Exception {
+    public CustomUrlAuthenticationFailureHandler customUrlAuthenticationFailureHandler(){
+        return new CustomUrlAuthenticationFailureHandler();
+    }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider, CustomUrlAuthenticationFailureHandler customUrlAuthenticationFailureHandler) throws Exception {
 //        http    .csrf().disable()
 //                .authorizeHttpRequests().anyRequest().hasRole("USER")
 //                .and()
@@ -51,6 +58,7 @@ public class SecurityConfiguration {
             http.formLogin(httpSecurityFormLoginConfigurer -> {
                 httpSecurityFormLoginConfigurer
                         .loginPage("/login")
+                        //.failureHandler(customUrlAuthenticationFailureHandler)
 
                 ;
             });
@@ -63,16 +71,17 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
     @Bean
+    @Transactional()
     public AuthenticationProvider authenticationProvider(PasswordEncoder encoder){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         InMemoryUserDetailsManager  userDetailsService = new InMemoryUserDetailsManager();
+
+        System.out.println(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123"));
         for (UserEntity user:this.userRepository.joinUsersWithRole()){
             userDetailsService.createUser(user);
 
         }
-//        userDetailsService.createUser(User.withUsername("admin").password(encoder.encode("admin")).roles("admin").build());
         provider.setUserDetailsService(userDetailsService);
 
         return provider;
