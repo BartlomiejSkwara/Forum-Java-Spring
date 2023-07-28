@@ -29,7 +29,10 @@ public class SecurityConfiguration {
 
     @Bean
     public CustomUrlAuthenticationFailureHandler customUrlAuthenticationFailureHandler(){
-        return new CustomUrlAuthenticationFailureHandler();
+        CustomUrlAuthenticationFailureHandler customUrlAuthenticationFailureHandler = new CustomUrlAuthenticationFailureHandler();
+        customUrlAuthenticationFailureHandler.setDefaultFailureUrl("/login?error");
+
+        return customUrlAuthenticationFailureHandler;
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider, CustomUrlAuthenticationFailureHandler customUrlAuthenticationFailureHandler) throws Exception {
@@ -51,14 +54,15 @@ public class SecurityConfiguration {
 //
 //            });
             http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {authorizationManagerRequestMatcherRegistry
-                    //.requestMatchers("/").authenticated()
+                    .requestMatchers("/sus").authenticated()
                     .anyRequest().permitAll();
             });
 
             http.formLogin(httpSecurityFormLoginConfigurer -> {
                 httpSecurityFormLoginConfigurer
                         .loginPage("/login")
-                        //.failureHandler(customUrlAuthenticationFailureHandler)
+                        .failureHandler(customUrlAuthenticationFailureHandler)
+
 
                 ;
             });
@@ -75,9 +79,10 @@ public class SecurityConfiguration {
     @Transactional()
     public AuthenticationProvider authenticationProvider(PasswordEncoder encoder){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setHideUserNotFoundExceptions(false);
+
         InMemoryUserDetailsManager  userDetailsService = new InMemoryUserDetailsManager();
 
-        System.out.println(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123"));
         for (UserEntity user:this.userRepository.joinUsersWithRole()){
             userDetailsService.createUser(user);
 

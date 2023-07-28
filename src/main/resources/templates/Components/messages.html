@@ -5,8 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-  <th:block th:fragment="messagesDisplayer(messages)">
-    <div th:each="message: ${messages}"  th:class="'alert alert-'+${message.getTypeName()}"  th:text="${message.getText()}">
+
+  <th:block th:if="${messages!=null}"  th:fragment="messagesDisplayer(messages)">
+
+    <div  th:each="message: ${messages.getAlerts()}"  th:class="'alert alert-'+${message.getTypeName()}"  th:text="${message.getText()}">
 
     </div>
   </th:block>

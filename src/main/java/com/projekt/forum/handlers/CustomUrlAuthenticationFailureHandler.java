@@ -12,7 +12,6 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.util.UrlUtils;
 import org.springframework.util.Assert;
 
@@ -30,12 +29,12 @@ public class CustomUrlAuthenticationFailureHandler implements AuthenticationFail
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-//    public SimpleUrlAuthenticationFailureHandler() {
-//    }
-//
-//    public SimpleUrlAuthenticationFailureHandler(String defaultFailureUrl) {
-//        setDefaultFailureUrl(defaultFailureUrl);
-//    }
+    public CustomUrlAuthenticationFailureHandler() {
+    }
+
+    public CustomUrlAuthenticationFailureHandler(String defaultFailureUrl) {
+        setDefaultFailureUrl(defaultFailureUrl);
+    }
 
     /**
      * Performs the redirect or forward to the {@code defaultFailureUrl} if set, otherwise
@@ -76,6 +75,7 @@ public class CustomUrlAuthenticationFailureHandler implements AuthenticationFail
      * Otherwise the exception will not be stored.
      */
     protected final void saveException(HttpServletRequest request, AuthenticationException exception) {
+
         if (this.forwardToDestination) {
             request.setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, exception);
             return;
