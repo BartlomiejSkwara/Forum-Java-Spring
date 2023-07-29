@@ -1,4 +1,4 @@
-package com.projekt.forum;
+package com.projekt.forum.controllers;
 
 import com.projekt.forum.entity.CategoryEntity;
 import com.projekt.forum.repositories.CategoryRepository;

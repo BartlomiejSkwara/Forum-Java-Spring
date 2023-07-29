@@ -13,6 +13,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -54,7 +55,9 @@ public class SecurityConfiguration {
 //
 //            });
             http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {authorizationManagerRequestMatcherRegistry
-                    .requestMatchers("/sus").authenticated()
+                    .requestMatchers("/deleteCategory").hasRole("admin")
+                    .requestMatchers("/addCategory").hasRole("admin")
+                    .requestMatchers("/editCategory").hasRole("admin")
                     .anyRequest().permitAll();
             });
 

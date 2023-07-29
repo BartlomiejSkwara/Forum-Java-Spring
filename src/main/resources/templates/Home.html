@@ -62,16 +62,16 @@
             <th:block th:each="cat: ${categories}">
                 <div class="card border-custom bg-dark-subtle m-2 " style="width: 18rem; height: 18rem;">
                     <!--                Removing and adding categories !!! admin only !!!-->
-                    <th:block sec:authorize="hasRole('admin')">
+                    <th:block sec:authorize=" hasRole('admin')">
                         <a th:href="@{'editCategoryView/'+${cat.getIdcategory()}}">
-                        <span class="position-absolute top-0 start-85 translate-middle p-2 bg-primary rounded-circle border-primary-subtle btn">
-                                <img class=" mx-auto"  src="" th:src="@{images/icons/wrench.svg}" alt="" width="16" height="16" style="fill: red;">
+                        <span class="position-absolute top-0 start-80 translate-middle p-2 bg-primary rounded-circle border-primary-subtle btn">
+                                <img class=" mx-auto"  src="" th:src="@{images/icons/wrench.svg}" alt="" width="24" height="24" style="fill: red;">
                                 <span class="visually-hidden">Edit Category</span>
                             </span>
                         </a>
 
-                        <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle border-danger-subtle btn" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-url="{url action='deleteCategory'}" data-bs-id="${cat.getIdcategory()}">
-                        <img class=" mx-auto " src="" th:src="@{images/icons/trash.svg}" alt="" width="16" height="16" style="fill: red;">
+                        <span class="position-absolute top-0 start-95 translate-middle p-2 bg-danger rounded-circle border-danger-subtle btn" data-bs-toggle="modal" data-bs-target="#deleteModal"   th:attr="data-bs-id=${cat.getIdcategory()}, data-bs-url=@{/}" >
+                        <img class=" mx-auto " src="" th:src="@{images/icons/trash.svg}" alt="" width="24" height="24" style="fill: red;">
                         <span class="visually-hidden">Remove Category</span>
                         </span>
 
