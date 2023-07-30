@@ -20,7 +20,6 @@ const exampleModal = document.getElementById('deleteModal')
         //const modalBody = exampleModal.querySelector('.modal-category-name-title')
         const modalYesButton = exampleModal.querySelector('.modal-button-accept')
 
-        console.log(modalYesButton);
         //modalBody.textContent = ` ${id}`;
         modalYesButton.setAttribute("href", url.concat("deleteCategory/",id));
 

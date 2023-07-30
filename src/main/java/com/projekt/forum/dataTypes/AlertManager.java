@@ -11,6 +11,11 @@ public class AlertManager {
     public ArrayList<Alert> getAlerts() {
         return alerts;
     }
+    public ArrayList<Alert> getAlertsAndClear(){
+        ArrayList<Alert> temp = new ArrayList<>(alerts);
+        clearAlerts();
+        return temp;
+    }
     public void addAlert(Alert alert){
         alerts.add(alert);
     }

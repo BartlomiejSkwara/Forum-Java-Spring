@@ -3,6 +3,7 @@ package com.projekt.forum.controllers;
 import com.projekt.forum.dataTypes.Alert;
 import com.projekt.forum.dataTypes.AlertManager;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
@@ -17,9 +18,14 @@ import java.util.Arrays;
 public class LoginController {
 
 
+    AlertManager alertManager;
+    @Autowired
+    public LoginController(AlertManager alertManager){
+        this.alertManager = alertManager;
+    }
 
     @GetMapping("/login")
-    public String login(AlertManager alertManager, Model model, HttpServletRequest request){
+    public String login(Model model, HttpServletRequest request){
         if(request.getSession().getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION)!=null){
             String exception = request.getSession().getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION).getClass().getSimpleName();
             if(exception.equals("UsernameNotFoundException")){
@@ -30,9 +36,11 @@ public class LoginController {
             else {
                 alertManager.addAlert(new Alert("ERROR", Alert.AlertType.DANGER));
             }
+
+            model.addAttribute("atr_alertManager", alertManager);
         }
 
-        model.addAttribute("atr_alertManager", alertManager);
+
         return "Login";
     }
 

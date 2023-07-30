@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface CategoryRepository extends ListCrudRepository<CategoryEntity,String> {
     List<CategoryEntity> findAll();
+
+
 }

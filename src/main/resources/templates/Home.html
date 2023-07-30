@@ -52,7 +52,8 @@
         </div>
     </div>
 
-
+    <div th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}" class= "text-center  mx-auto dark ">
+    </div>
 
 <!--    Display all of the categories taken from db-->
     <div class= "text-center flex-grow-1 mx-auto  dark ">
@@ -90,7 +91,7 @@
             </th:block>
 
             <th:block sec:authorize="hasRole('admin')">
-                <a href = ""  th:href="@{addCategoryView}"   >
+                <a href = ""  th:href="@{addCategory}"   >
                     <div class="card bg-dark-subtle m-2 border-dots border-custom" style="width: 18rem; height: 18rem;">
                         <img class="w-50 m-auto custom-icon"  src="" th:src="@{images/icons/plus.svg}" alt=""  >
                     </div>
