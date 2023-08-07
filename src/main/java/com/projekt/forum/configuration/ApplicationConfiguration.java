@@ -13,4 +13,6 @@ public class ApplicationConfiguration {
     AlertManager alertManager(){
         return new AlertManager();
     }
+
+
 }

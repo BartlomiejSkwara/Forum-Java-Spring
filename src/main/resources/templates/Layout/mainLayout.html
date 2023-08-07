@@ -20,14 +20,7 @@
 
 
 
-
-    <th:block th:if="${onlyBody==null or onlyBody==false}">
-        <div th:insert="${content}" class = "d-flex pt-5 mt-5 mx-auto col-12 col-sm-9 flex-column main-content"></div>
-    </th:block>
-    <th:block th:if="${not (onlyBody==null or onlyBody==false)}">
-        <div th:replace="${content}"></div>
-    </th:block>
-
+    <div id="content" th:insert="${content}" th:class = "${onlyBody==null or onlyBody==false}?'d-flex pt-5 mt-5 mx-auto col-12 col-sm-9 flex-column main-content':''"></div>
 
 
     <th:block th:if="${onlyBody==null or onlyBody==false}">

@@ -1,5 +1,6 @@
 package com.projekt.forum.entity;
 
+import com.projekt.forum.dataTypes.forms.CategoryCUForm;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,8 +11,6 @@ import java.util.Objects;
 public class CategoryEntity {
 
     @Id()
-    @GeneratedValue(strategy = GenerationType.UUID )
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "idcategory" , length = 45)
     private String idcategory;
     @Column(name = "name", length = 45)
@@ -26,6 +25,11 @@ public class CategoryEntity {
         this.description = description;
     }
 
+    public CategoryEntity(CategoryCUForm categoryCUForm){
+        this.name = categoryCUForm.getCategoryName();
+        this.idcategory = this.name.toLowerCase().replace(' ','-');
+        this.description = categoryCUForm.getCategoryDescription();
+    }
     public String getIdcategory() {
         return idcategory;
     }

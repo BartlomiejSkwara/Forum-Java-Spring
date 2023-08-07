@@ -56,7 +56,7 @@ public class SecurityConfiguration {
 //            });
             http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {authorizationManagerRequestMatcherRegistry
                     .requestMatchers("/deleteCategory/**").hasRole("admin")
-                    .requestMatchers("/addCategory/**").hasRole("admin")
+                    .requestMatchers("/addCategory").hasRole("admin")
                     .requestMatchers("/editCategory/**").hasRole("admin")
                     .anyRequest().permitAll();
             });
