@@ -56,14 +56,17 @@ public class CategoryCRUDController {
     @PostMapping("/addCategory")
     public String addCategoryPost(@Valid @ModelAttribute() CategoryCUForm categoryCUForm, BindingResult bindingResult,
                                    Model model) throws IOException {
+        model.addAttribute("atr_title", "Dodawanie Kategorii");
         if(validationUtility.ConvertValidationErrors(bindingResult,this.alertManager)){
-            categoryService.addCategory(categoryCUForm);
+            if (!categoryService.addCategory(categoryCUForm)){
+                model.addAttribute("atr_previousForm",categoryCUForm);
+            }
         }
         else {
-            model.addAttribute("atr_title", "Dodawanie Kategorii");
+            model.addAttribute("atr_previousForm",categoryCUForm);
         }
 
-        model.addAttribute("atr_messages",alertManager);
+        model.addAttribute("atr_alertManager",alertManager);
         return "CategoryCU :: content";
 
 

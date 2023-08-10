@@ -2,7 +2,7 @@
 <html th:replace="~{Layout/mainLayout :: layout(~{::title}, ~{::content}, false)}" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
 <head>
     <meta charset="UTF-8">
-    <title th:title="${atr_title}" th:fragment="title"></title>
+    <title th:text="${atr_title}" th:fragment="title"></title>
 </head>
 <body>
 
@@ -26,7 +26,7 @@
           <div class="mx-auto mb-3 " style="width: 21rem;">
             <label for="categoryName" class="form-label">Nazwa Kategorii</label>
             <input type="text" class="form-control" name="categoryName" id="categoryName"  maxlength="45" aria-describedby="categoryNameHelp"
-                   value="">
+                   th:value="${atr_previousForm==null}?'':${atr_previousForm.getCategoryName()}">
               <!--                   ${atr_category == null}? ${atr_categoryForm.getName()}:${atr_category.getName()}-->
             <div id="categoryNameHelp" class="form-text">Tak będzie nazywała się kategoria.</div>
           </div>
@@ -35,8 +35,7 @@
           <div class="mx-auto mb-3 " style="width: 21rem;">
             <label for="categoryDescription" class="form-label">Opis Kategorii</label>
             <textarea class="form-control  no-scroll" name="categoryDescription" id="categoryDescription" maxlength="90" aria-describedby="categoryDescriptionHelp" rows="3"
-                     ></textarea>
-<!--               th:value="${atr_category == null}? ${atr_categoryForm.getDescription()}:${atr_category.getDescription()}"-->
+                      th:text="${atr_previousForm==null}?'':${atr_previousForm.getCategoryDescription()}" ></textarea>
             <div id="categoryDescriptionHelp" class="form-text">Taki opis będzie widniał pod nazwą kategorii.</div>
           </div>
 
@@ -45,7 +44,7 @@
           </form>
 
         </div>
-        <div th:insert="~{Components/messages :: messagesDisplayer(${atr_messages},true)}" class= "text-center mb-auto  mx-auto dark ">
+        <div th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}" class= "text-center mb-auto  mx-auto dark ">
 
         </div>
 

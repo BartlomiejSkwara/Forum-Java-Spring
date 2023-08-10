@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html th:replace="~{Layout/mainLayout :: layout(~{::title},~{::content},false)}" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:fragment="title">Error</title>
+</head>
+<body>
+    <th:block th:fragment="content">
+        <div class = "   w-100 h-100  my-auto d-flex  p-3 flex-column justify-content-center align-items-center">
+            <div class= "text-center mx-auto my-auto dark w-60">
+                <div class="">
+                    <img class="mb-4 img-fluid" src="" th:src="@{images/yuumsad.svg}" alt="" >
+                </div>
+
+                <th:block th:if="${atr_errMSG==null}">
+                    <h1>Drogi Użytkowniku </h1>
+                    <hr>
+                    <br>
+                    <h2>Nie wiem czy jesteś tego świadom, ale .... </h2>
+                    <br>
+                    <h3>.... nie powinieneś się tutaj znaleźć </h3>
+                    <br>
+                    <h4>Ale skoro jednak tutaj jesteś może oznaczać to tylko jedno :<</h4>
+                    <br>
+                    <h5>Mamy obecnie drobne problemy techniczne :<<<</h5>
+                    <br>
+                    <p>Prosimy więc o cierpliwość, postaramy się rozwikłać je tak szybko jak to tylko możliwe :> </p>
+                    <br>
+                </th:block>
+
+                <th:block th:unless="${atr_errMSG==null}">
+                    <h1 th:text="${atr_errMSG}"></h1>
+                </th:block>
+
+            </div>
+
+        </div>
+    </th:block>
+
+</body>
+</html>

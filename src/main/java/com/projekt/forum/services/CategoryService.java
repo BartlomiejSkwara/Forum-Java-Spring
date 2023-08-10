@@ -5,6 +5,7 @@ import com.projekt.forum.dataTypes.AlertManager;
 import com.projekt.forum.dataTypes.forms.CategoryCUForm;
 import com.projekt.forum.entity.CategoryEntity;
 import com.projekt.forum.repositories.CategoryRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -46,7 +47,26 @@ public class CategoryService {
         }
     }
 
-    public boolean addCategory(CategoryCUForm categoryCUForm){
-        return this.categoryRepository.save(new CategoryEntity(categoryCUForm))!=null;
+    public boolean addCategory(CategoryCUForm categoryCUForm) {
+
+        if(categoryRepository.findByName(categoryCUForm.getCategoryName()).isEmpty())
+        {
+
+                categoryRepository.save(new CategoryEntity(categoryCUForm));
+                alertManager.addAlert(new Alert("Poprawnie dodano kategorię "+categoryCUForm.getCategoryName(), Alert.AlertType.SUCCESS));
+
+
+        }
+        else
+        {
+            alertManager.addAlert(new Alert("Kategoria o podanej nazwie już istnieje !!! ", Alert.AlertType.WARNING));
+            return false;
+        }
+
+
+
+        return true;
+
+        //return this.categoryRepository.save(new CategoryEntity(categoryCUForm))!=null;
     }
 }

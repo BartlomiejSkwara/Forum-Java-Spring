@@ -30,8 +30,14 @@ function ajaxPostFormPagination(id_form,url,id_to_reload)
     
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
-		if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-			document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
+
+		if (xmlHttp.readyState == 4 ){
+			if (xmlHttp.status == 500){
+				document.body.innerHTML = xmlHttp.responseText;
+			}
+			if(xmlHttp.status == 200) {
+				document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
+			}
 		}
 	}
     xmlHttp.open("POST", url, true); 
@@ -49,9 +55,15 @@ function ajaxPostForm(id_form,url,id_to_reload)
     console.log(url);
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
-		if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-			document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
+		if (xmlHttp.readyState == 4 ){
+			if (xmlHttp.status == 500){
+				document.body.innerHTML = xmlHttp.responseText;
+			}
+			if(xmlHttp.status == 200) {
+				document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
+			}
 		}
+
 	}
     xmlHttp.open("POST", url, true); 
     xmlHttp.send(formData); 
@@ -68,9 +80,15 @@ function ajaxPostFormEx(id_form,url,user_function)
     var formData = new FormData(form); 
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
-		if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-			user_function();
+		if (xmlHttp.readyState == 4 ){
+			if (xmlHttp.status == 500){
+				document.body.innerHTML = xmlHttp.responseText;
+			}
+			if(xmlHttp.status == 200) {
+				user_function();
+			}
 		}
+
 	}
     xmlHttp.open("POST", url, true); 
     xmlHttp.send(formData); 
@@ -80,6 +98,8 @@ function ajaxPostFormEx(id_form,url,user_function)
 // Zawartość do odświeżenia jest otrzymana w odpowiedzi na żądanie wysłane do podanego adresu 'url'.
 // Jeśli podano parametr 'interval' >0 (sekundy), to po otrzymaniu odpowiedzi po upływie podanego
 // interwału odświeżanie zostanie automatycznie ponowione (tzw. AJAX pooling).
+
+///////TODO tutaj możliwe że trzeba będzie zmienić coś ze status codem jak we wcześniejszych
 function ajaxReloadElement(id_element,url,interval=0) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
