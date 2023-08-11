@@ -5,18 +5,19 @@
     <title>Title</title>
 </head>
 <body>
+  <th:block th:if="${messages!=null}"  th:fragment="messagesDisplayer(messages,clear)" >
+      <div id="messages"  class= "text-center  mx-auto dark ">
+        <th:block th:if="${clear==true}">
+            <div  th:each="message: ${messages.getAlertsAndClear()}"  th:class="'alert alert-'+${message.getTypeName()}"  th:text="${message.getText()}">
 
-  <th:block th:if="${messages!=null}"  th:fragment="messagesDisplayer(messages,clear)">
-    <th:block th:if="${clear==true}">
-        <div  th:each="message: ${messages.getAlertsAndClear()}"  th:class="'alert alert-'+${message.getTypeName()}"  th:text="${message.getText()}">
+            </div>
+        </th:block>
+        <th:block th:if="${clear==false}">
+            <div  th:each="message: ${messages.getAlerts()}"  th:class="'alert alert-'+${message.getTypeName()}"  th:text="${message.getText()}">
 
-        </div>
-    </th:block>
-    <th:block th:if="${clear==false}">
-        <div  th:each="message: ${messages.getAlerts()}"  th:class="'alert alert-'+${message.getTypeName()}"  th:text="${message.getText()}">
-
-        </div>
-    </th:block>
+            </div>
+        </th:block>
+      </div>
   </th:block>
 </body>
 </html>

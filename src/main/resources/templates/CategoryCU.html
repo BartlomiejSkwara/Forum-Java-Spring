@@ -44,9 +44,9 @@
           </form>
 
         </div>
-        <div th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}" class= "text-center mb-auto  mx-auto dark ">
+        <th:block th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}">
 
-        </div>
+        </th:block>
 
 
       </div>

@@ -21,6 +21,7 @@ public class CategoryService {
     }
 
 
+
     private boolean deleteWithResponse(String categoryID){
         Optional<CategoryEntity> categoryEntity = categoryRepository.findById(categoryID);
         if (categoryEntity.isPresent()){

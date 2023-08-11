@@ -24,6 +24,17 @@ public class LoginController {
         this.alertManager = alertManager;
     }
 
+
+    @RequestMapping("/loginSuccess")
+    public String loginSuccess(){
+        alertManager.addAlert(new Alert("Zostałeś poprawnie zalogowany :>",Alert.AlertType.SUCCESS));
+        return "redirect:/";
+    }
+    @GetMapping("/logout")
+    public String logout(){
+        alertManager.addAlert(new Alert("Zostałeś wylogowany :>",Alert.AlertType.WARNING));
+        return "redirect:/";
+    }
     @GetMapping("/login")
     public String login(Model model, HttpServletRequest request){
         if(request.getSession().getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION)!=null){
@@ -37,9 +48,14 @@ public class LoginController {
                 alertManager.addAlert(new Alert("ERROR", Alert.AlertType.DANGER));
             }
 
-            model.addAttribute("atr_alertManager", alertManager);
-        }
 
+        }
+        //TODO przenieś to tam gdzie trzeba
+//        else {
+//            alertManager.addAlert(new Alert("Poprawnie zalogowano Witaj :>", Alert.AlertType.SUCCESS));
+//
+//        }
+        model.addAttribute("atr_alertManager", alertManager);
 
         return "Login";
     }

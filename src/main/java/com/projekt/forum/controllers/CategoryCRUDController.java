@@ -11,7 +11,6 @@ import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,17 +21,19 @@ import java.util.Optional;
 @Controller
 public class CategoryCRUDController {
 
-
     AlertManager alertManager;
     ValidationUtility validationUtility;
     CategoryService categoryService;
     HttpServletResponse httpServletResponse;
+    CategoryRepository categoryRepository;
+
     @Autowired
-    public CategoryCRUDController(AlertManager alertManager, ValidationUtility validationUtility, CategoryService categoryService, HttpServletResponse httpServletResponse ){
+    public CategoryCRUDController(AlertManager alertManager, ValidationUtility validationUtility, CategoryService categoryService, HttpServletResponse httpServletResponse, CategoryRepository categoryRepository ){
         this.alertManager = alertManager;
         this.validationUtility = validationUtility;
         this.categoryService = categoryService;
         this.httpServletResponse = httpServletResponse;
+        this.categoryRepository = categoryRepository;
     }
 
 
@@ -45,6 +46,34 @@ public class CategoryCRUDController {
         categoryService.deleteCategory(categoryID);
         return "redirect:/";
     }
+
+
+    @GetMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryID}"})
+    public String editCategoryGet(Model model, @PathVariable(required = false) String categoryID){
+
+        if (categoryID==null||categoryID.isEmpty()){
+            alertManager.addAlert(new Alert("Nie sprecyzowano ID kategorii do edycji !!!", Alert.AlertType.WARNING));
+
+        }
+        else {
+
+            Optional<CategoryEntity> categoryEntity = categoryRepository.findByIdcategory(categoryID);
+            if (categoryEntity.isEmpty()){
+                alertManager.addAlert(new Alert("Nie można edytować nieistniejącej kategorii !!!", Alert.AlertType.WARNING));
+
+            }
+            else{
+                model.addAttribute("atr_title","Edycja Kategorii: "+categoryEntity.get().getName());
+                model.addAttribute("atr_previousForm",new CategoryCUForm(categoryEntity.get().getName(),categoryEntity.get().getDescription()));
+                return "CategoryCU";
+            }
+
+        }
+        return "redirect:/";
+    }
+
+
+
 
     @GetMapping("/addCategory")
     public String addCategoryGet(Model model){

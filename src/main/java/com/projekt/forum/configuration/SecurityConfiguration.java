@@ -47,7 +47,7 @@ public class SecurityConfiguration {
 //        ;
 
             http.logout(logout->logout
-                            .logoutSuccessUrl("/")
+                            .logoutSuccessUrl("/logout")
                             .permitAll()
                     );
 //            http.logout(logout->{
@@ -65,10 +65,12 @@ public class SecurityConfiguration {
                 httpSecurityFormLoginConfigurer
                         .loginPage("/login")
                         .failureHandler(customUrlAuthenticationFailureHandler)
-
+                        .successForwardUrl("/loginSuccess")
 
                 ;
             });
+
+//            http.httpBasic(httpSecurityHttpBasicConfigurer -> {httpSecurityHttpBasicConfigurer.})
 
             http.httpBasic(Customizer.withDefaults());
 

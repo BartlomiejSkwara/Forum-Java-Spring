@@ -33,6 +33,7 @@ public class CategoryCUForm {
         this.categoryDescription = categoryDescription;
     }
 
+
     public String getCategoryName() {
         return categoryName;
     }

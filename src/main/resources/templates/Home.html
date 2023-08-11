@@ -25,8 +25,8 @@
         </div>
     </div>
 
-<!--    <div th:insert="~{Components/messages.html::messagesDisplayer(messages)}" class= "text-center mb-auto flex-shrink-1  mx-auto dark ">-->
-<!--    </div>-->
+    <th:block th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}">
+    </th:block>
 
 
 
@@ -64,7 +64,7 @@
                 <div class="card border-custom bg-dark-subtle m-2 " style="width: 18rem; height: 18rem;">
                     <!--                Removing and adding categories !!! admin only !!!-->
                     <th:block sec:authorize=" hasRole('admin')">
-                        <a th:href="@{'editCategoryView/'+${cat.getIdcategory()}}">
+                        <a th:href="@{'editCategory/'+${cat.getIdcategory()}}">
                         <span class="position-absolute top-0 start-80 translate-middle p-2 bg-primary rounded-circle border-primary-subtle btn">
                                 <img class=" mx-auto"  src="" th:src="@{images/icons/wrench.svg}" alt="" width="24" height="24" style="fill: red;">
                                 <span class="visually-hidden">Edit Category</span>

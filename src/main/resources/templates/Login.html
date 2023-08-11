@@ -31,8 +31,8 @@
 
             </div>
             <!--Messages-->
-            <div th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}" class= "text-center  mx-auto dark ">
-            </div>
+            <th:block th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}">
+            </th:block>
         </div>
     </body>
 </html>
