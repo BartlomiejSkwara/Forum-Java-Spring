@@ -10,6 +10,9 @@ import com.projekt.forum.services.CategoryService;
 import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,22 +67,53 @@ public class CategoryCRUDController {
             }
             else{
                 model.addAttribute("atr_title","Edycja Kategorii: "+categoryEntity.get().getName());
+
                 model.addAttribute("atr_previousForm",new CategoryCUForm(categoryEntity.get().getName(),categoryEntity.get().getDescription()));
-                return "CategoryCU";
+                model.addAttribute("atr_editedCategoryID",categoryID);
+
+                return "CategoryEditing";
             }
 
         }
         return "redirect:/";
     }
 
+    @PostMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryID}"})
+    public String editCategoryPost(@Valid @ModelAttribute() CategoryCUForm categoryCUForm,BindingResult bindingResult,
+                                   @PathVariable(required = false) String categoryID,
+                                   HttpServletResponse httpServletResponse, Model model ){
 
+        if (categoryID==null||categoryID.isEmpty()){
+            alertManager.addAlert(new Alert("Nie sprecyzowano ID kategorii do edycji !!!", Alert.AlertType.WARNING));
+            return "redirect:/?";
+        }
+        else {
+
+            if (validationUtility.ConvertValidationErrors(bindingResult, alertManager)) {
+                model.addAttribute("atr_alertManager", alertManager);
+                if (categoryService.editCategory(categoryCUForm, categoryID)) {
+                    httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
+                } else {
+                    httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+
+                return "redirect:/?";
+            } else {
+                model.addAttribute("atr_editedCategoryID", categoryID);
+                model.addAttribute("atr_title", "Edycja Kategorii: " + categoryID);
+                model.addAttribute("atr_previousForm", categoryCUForm);
+                model.addAttribute("atr_alertManager", alertManager);
+                return "CategoryEditing :: content";
+            }
+        }
+    }
 
 
     @GetMapping("/addCategory")
     public String addCategoryGet(Model model){
 
         model.addAttribute("atr_title", "Dodawanie Kategorii");
-        return "CategoryCU";
+        return "CategoryCreation";
     }
 
     @PostMapping("/addCategory")
@@ -96,7 +130,7 @@ public class CategoryCRUDController {
         }
 
         model.addAttribute("atr_alertManager",alertManager);
-        return "CategoryCU :: content";
+        return "CategoryCreation :: content";
 
 
     }

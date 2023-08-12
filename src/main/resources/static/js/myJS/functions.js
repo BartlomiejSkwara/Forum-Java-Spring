@@ -32,7 +32,7 @@ function ajaxPostFormPagination(id_form,url,id_to_reload)
 	xmlHttp.onreadystatechange = function() {
 
 		if (xmlHttp.readyState == 4 ){
-			if (xmlHttp.status == 500){
+			if (xmlHttp.status == 500 || xmlHttp.status == 201){
 				document.body.innerHTML = xmlHttp.responseText;
 			}
 			if(xmlHttp.status == 200) {
@@ -56,7 +56,7 @@ function ajaxPostForm(id_form,url,id_to_reload)
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 ){
-			if (xmlHttp.status == 500){
+			if (xmlHttp.status == 500 || xmlHttp.status == 201){
 				document.body.innerHTML = xmlHttp.responseText;
 			}
 			if(xmlHttp.status == 200) {
@@ -69,6 +69,30 @@ function ajaxPostForm(id_form,url,id_to_reload)
     xmlHttp.send(formData); 
 }
 
+function ajaxPostFormWithPathParam(id_form,url,id_to_reload)
+{
+
+	var form = document.getElementById(id_form);
+	var formData = new FormData(form);
+	var pathParam =  form.getAttribute("pathParam");
+	console.log(pathParam);
+	console.log(url.concat(pathParam));
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if (xmlHttp.readyState == 4 ){
+			if (xmlHttp.status == 500 || xmlHttp.status == 201){
+				document.body.innerHTML = xmlHttp.responseText;
+			}
+			if(xmlHttp.status == 200) {
+				document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
+			}
+		}
+
+	}
+
+	xmlHttp.open("POST", url.concat(pathParam), true);
+	xmlHttp.send(formData);
+}
 
 
 
@@ -81,7 +105,7 @@ function ajaxPostFormEx(id_form,url,user_function)
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 ){
-			if (xmlHttp.status == 500){
+			if (xmlHttp.status == 500 || xmlHttp.status == 201){
 				document.body.innerHTML = xmlHttp.responseText;
 			}
 			if(xmlHttp.status == 200) {
