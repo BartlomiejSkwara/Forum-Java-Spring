@@ -7,7 +7,6 @@ import com.projekt.forum.entity.CategoryEntity;
 import com.projekt.forum.repositories.CategoryRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,45 +28,24 @@ public class CategoryService {
 
     //TODO wprowdz zmiany w strukturze bd
     @Transactional
-    public boolean editCategory(CategoryCUForm categoryCUForm, String categoryID){
-        CategoryEntity categoryEntity = new CategoryEntity(categoryCUForm);
-        Optional<CategoryEntity> existingEntity = categoryRepository.findById(categoryEntity.getIdcategory());
+    public boolean editCategory(CategoryCUForm categoryCUForm, Integer categoryID){
 
-        if (categoryEntity.getIdcategory().equals(categoryID)){
-            if (existingEntity.isPresent()){
-//                existingEntity.get().se
-//                entityManager.merge()
-                alertManager.addAlert(new Alert("Edycja kategorii " + categoryID + " zakończona sukcesem", Alert.AlertType.SUCCESS));
-                return true;
-            }
-            else {
-                alertManager.addAlert(new Alert("Próbowałeś zmienić nie istniejącą kategorię !!!", Alert.AlertType.DANGER));
-                return false;
-            }
+        Optional<CategoryEntity> existingEntity = categoryRepository.findByCategoryID(categoryID);
+        if (existingEntity.isPresent()){
+            categoryRepository.save(new CategoryEntity(categoryCUForm));
+            alertManager.addAlert(new Alert("Edycja kategorii " + categoryID + " zakończona sukcesem", Alert.AlertType.SUCCESS));
+            return true;
         }
         else {
-            if (existingEntity.isPresent()){
-                existingEntity = categoryRepository.findById(categoryID);
-                if (existingEntity.isPresent()){
-                    //zapis nadpis
-                    alertManager.addAlert(new Alert("Edycja kategorii " + categoryID + " zakończona sukcesem", Alert.AlertType.SUCCESS));
-                    return true;
-                }
-                else{
-                    alertManager.addAlert(new Alert("Próbowałeś zmienić nie istniejącą kategorię !!!", Alert.AlertType.DANGER));
-                    return false;
-                }
-            }
-            else {
-                alertManager.addAlert(new Alert("Istnieje już inna kategoria o takiej nazwie", Alert.AlertType.WARNING));
-                return false;
-            }
+            alertManager.addAlert(new Alert("Próbowałeś zmienić nie istniejącą kategorię !!!", Alert.AlertType.DANGER));
+            return false;
         }
+
 
     }
 
-    private boolean deleteWithResponse(String categoryID){
-        Optional<CategoryEntity> categoryEntity = categoryRepository.findById(categoryID);
+    private boolean deleteWithResponse(String categoryURL){
+        Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryURL);
         if (categoryEntity.isPresent()){
             categoryRepository.delete(categoryEntity.get());
             return true;
@@ -75,15 +53,15 @@ public class CategoryService {
 
         return false;
     }
-    public void deleteCategory(String categoryID){
-        if (categoryID!=null)
+    public void deleteCategory(String categoryURL){
+        if (categoryURL!=null)
         {
-            if(deleteWithResponse(categoryID))
+            if(deleteWithResponse(categoryURL))
             {
-                alertManager.addAlert(new Alert("Poprawnie usunięto kategorię: "+categoryID, Alert.AlertType.SUCCESS));
+                alertManager.addAlert(new Alert("Poprawnie usunięto kategorię: "+categoryURL, Alert.AlertType.SUCCESS));
             }else
             {
-                alertManager.addAlert(new Alert("Nie powiodło się usunięcie kategorii: "+categoryID, Alert.AlertType.DANGER));
+                alertManager.addAlert(new Alert("Nie powiodło się usunięcie kategorii: "+categoryURL, Alert.AlertType.DANGER));
             }
         }
         else

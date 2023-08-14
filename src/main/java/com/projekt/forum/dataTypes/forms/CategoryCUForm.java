@@ -27,10 +27,12 @@ public class CategoryCUForm {
                 message = "Wartość w polu \" Opis Kategorii \" zawiera jeden z zakazanych znaków:  \" \' & < > ")
     String categoryDescription;
 
+    Integer categoryID;
 
-    public CategoryCUForm(String categoryName, String categoryDescription){
+    public CategoryCUForm(Integer categoryID, String categoryName, String categoryDescription){
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
+        this.categoryID = categoryID;
     }
 
 
@@ -41,4 +43,6 @@ public class CategoryCUForm {
     public String getCategoryDescription() {
         return categoryDescription;
     }
+
+    public Integer getCategoryID(){return  categoryID;}
 }

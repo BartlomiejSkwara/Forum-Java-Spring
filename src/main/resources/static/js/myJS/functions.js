@@ -69,7 +69,7 @@ function ajaxPostForm(id_form,url,id_to_reload)
     xmlHttp.send(formData); 
 }
 
-function ajaxPostFormWithPathParam(id_form,url,id_to_reload)
+function  ajaxPostFormWithPathParam(id_form,url,id_to_reload)
 {
 
 	var form = document.getElementById(id_form);
@@ -80,10 +80,16 @@ function ajaxPostFormWithPathParam(id_form,url,id_to_reload)
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 ){
+			console.log("faza1");
+			console.log(xmlHttp.status);
 			if (xmlHttp.status == 500 || xmlHttp.status == 201){
-				document.body.innerHTML = xmlHttp.responseText;
+				console.log("get away");
+				console.log(xmlHttp.getResponseHeader("Location"));
+				console.log(xmlHttp.getAllResponseHeaders());
+				window.location.href = xmlHttp.getResponseHeader("Location");
 			}
 			if(xmlHttp.status == 200) {
+				console.log("stay");
 				document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
 			}
 		}

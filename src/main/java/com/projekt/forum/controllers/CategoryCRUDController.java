@@ -10,9 +10,6 @@ import com.projekt.forum.services.CategoryService;
 import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,33 +40,32 @@ public class CategoryCRUDController {
 
 
 
-    @GetMapping(path={"/deleteCategory/{categoryID}","/deleteCategory","/deleteCategory/"})
-    public String deleteCategory(@PathVariable(required = false) String categoryID ) throws IOException {
+    @GetMapping(path={"/deleteCategory/{categoryURL}","/deleteCategory","/deleteCategory/"})
+    public String deleteCategory(@PathVariable(required = false) String categoryURL ) throws IOException {
 
-        categoryService.deleteCategory(categoryID);
+        categoryService.deleteCategory(categoryURL);
         return "redirect:/";
     }
 
 
-    @GetMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryID}"})
-    public String editCategoryGet(Model model, @PathVariable(required = false) String categoryID){
+    @GetMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryURL}"})
+    public String editCategoryGet(Model model, @PathVariable(required = false) String categoryURL){
 
-        if (categoryID==null||categoryID.isEmpty()){
-            alertManager.addAlert(new Alert("Nie sprecyzowano ID kategorii do edycji !!!", Alert.AlertType.WARNING));
+        if (categoryURL==null||categoryURL.isEmpty()){
+            alertManager.addAlert(new Alert("Nie wybrano kategorii do edycji !!!", Alert.AlertType.WARNING));
 
         }
         else {
 
-            Optional<CategoryEntity> categoryEntity = categoryRepository.findByIdcategory(categoryID);
+            Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryURL);
             if (categoryEntity.isEmpty()){
-                alertManager.addAlert(new Alert("Nie można edytować nieistniejącej kategorii !!!", Alert.AlertType.WARNING));
+                alertManager.addAlert(new Alert("Nie można edytować nie istniejącej kategorii !!!", Alert.AlertType.WARNING));
 
             }
             else{
                 model.addAttribute("atr_title","Edycja Kategorii: "+categoryEntity.get().getName());
-
-                model.addAttribute("atr_previousForm",new CategoryCUForm(categoryEntity.get().getName(),categoryEntity.get().getDescription()));
-                model.addAttribute("atr_editedCategoryID",categoryID);
+                model.addAttribute("atr_previousForm",new CategoryCUForm(categoryEntity.get().getCategoryID(),categoryEntity.get().getName(),categoryEntity.get().getDescription()));
+                model.addAttribute("atr_editedCategoryURL",categoryURL);
 
                 return "CategoryEditing";
             }
@@ -78,31 +74,33 @@ public class CategoryCRUDController {
         return "redirect:/";
     }
 
-    @PostMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryID}"})
+    @PostMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryURL}"})
+    @ResponseStatus
     public String editCategoryPost(@Valid @ModelAttribute() CategoryCUForm categoryCUForm,BindingResult bindingResult,
-                                   @PathVariable(required = false) String categoryID,
+                                   @PathVariable(required = false) String categoryURL,
                                    HttpServletResponse httpServletResponse, Model model ){
 
-        if (categoryID==null||categoryID.isEmpty()){
-            alertManager.addAlert(new Alert("Nie sprecyzowano ID kategorii do edycji !!!", Alert.AlertType.WARNING));
-            return "redirect:/?";
+        if (categoryURL==null||categoryURL.isEmpty()||categoryCUForm.getCategoryID()==null){
+            alertManager.addAlert(new Alert("Nie sprecyzowano kategorii do edycji !!!", Alert.AlertType.WARNING));
+            httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return "Home";
         }
         else {
-
+            model.addAttribute("atr_alertManager", alertManager);
             if (validationUtility.ConvertValidationErrors(bindingResult, alertManager)) {
-                model.addAttribute("atr_alertManager", alertManager);
-                if (categoryService.editCategory(categoryCUForm, categoryID)) {
+
+                if (categoryService.editCategory(categoryCUForm, categoryCUForm.getCategoryID())) {
                     httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
+                    //httpServletResponse.setHeader();
                 } else {
                     httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
 
-                return "redirect:/?";
+                return "Home";
             } else {
-                model.addAttribute("atr_editedCategoryID", categoryID);
-                model.addAttribute("atr_title", "Edycja Kategorii: " + categoryID);
+                model.addAttribute("atr_editedCategoryURL", categoryURL);
+                model.addAttribute("atr_title", "Edycja Kategorii: " + categoryURL);
                 model.addAttribute("atr_previousForm", categoryCUForm);
-                model.addAttribute("atr_alertManager", alertManager);
                 return "CategoryEditing :: content";
             }
         }

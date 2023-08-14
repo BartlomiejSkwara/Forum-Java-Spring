@@ -64,20 +64,20 @@
                 <div class="card border-custom bg-dark-subtle m-2 " style="width: 18rem; height: 18rem;">
                     <!--                Removing and adding categories !!! admin only !!!-->
                     <th:block sec:authorize=" hasRole('admin')">
-                        <a th:href="@{'editCategory/'+${cat.getIdcategory()}}">
+                        <a th:href="@{'editCategory/'+${cat.getUrl()}}">
                         <span class="position-absolute top-0 start-80 translate-middle p-2 bg-primary rounded-circle border-primary-subtle btn">
                                 <img class=" mx-auto"  src="" th:src="@{~/images/icons/wrench.svg}" alt="" width="24" height="24" style="fill: red;">
                                 <span class="visually-hidden">Edit Category</span>
                             </span>
                         </a>
 
-                        <span class="position-absolute top-0 start-95 translate-middle p-2 bg-danger rounded-circle border-danger-subtle btn" data-bs-toggle="modal" data-bs-target="#deleteModal"   th:attr="data-bs-id=${cat.getIdcategory()}, data-bs-url=@{/}" >
+                        <span class="position-absolute top-0 start-95 translate-middle p-2 bg-danger rounded-circle border-danger-subtle btn" data-bs-toggle="modal" data-bs-target="#deleteModal"   th:attr="data-bs-id=${cat.getUrl()}, data-bs-url=@{/}" >
                         <img class=" mx-auto " src="" th:src="@{~/images/icons/trash.svg}" alt="" width="24" height="24" style="fill: red;">
                         <span class="visually-hidden">Remove Category</span>
                         </span>
 
                     </th:block>
-                    <a href="" th:href = "@{'categoryEntity/'+${cat.getIdcategory()}}" class ="text-decoration-none text-reset" >
+                    <a href="" th:href = "@{'categoryEntity/'+${cat.getUrl()}}" class ="text-decoration-none text-reset" >
                     <img src="" th:src="@{images/yuumbread.svg}" class="card-img-top border-bottom" alt="...">
 
                     <div class="card-body bg-dark-subtle">

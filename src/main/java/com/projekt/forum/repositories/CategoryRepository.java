@@ -13,8 +13,8 @@ import java.util.Optional;
 public interface CategoryRepository extends ListCrudRepository<CategoryEntity,String> {
     List<CategoryEntity> findAll();
     Optional<CategoryEntity> findByName(String name);
-    Optional<CategoryEntity> findByIdcategory(String idcategory);
-
+    Optional<CategoryEntity> findByCategoryID(Integer idcategory);
+    Optional<CategoryEntity> findByUrl(String url);
 
 
 }
