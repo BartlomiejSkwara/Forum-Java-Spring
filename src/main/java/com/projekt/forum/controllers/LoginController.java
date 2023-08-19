@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class LoginController {
 
 
-    AlertManager alertManager;
+    private final AlertManager alertManager;
     @Autowired
     public LoginController(AlertManager alertManager){
         this.alertManager = alertManager;

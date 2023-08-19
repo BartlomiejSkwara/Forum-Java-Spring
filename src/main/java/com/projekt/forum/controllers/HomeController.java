@@ -15,8 +15,8 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    CategoryRepository categoryRepository;
-    AlertManager alertManager;
+    private final CategoryRepository categoryRepository;
+    private final AlertManager alertManager;
     @Autowired
     public HomeController(CategoryRepository categoryRepository, AlertManager alertManager){
         this.categoryRepository = categoryRepository;

@@ -11,6 +11,7 @@ import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,11 +22,11 @@ import java.util.Optional;
 @Controller
 public class CategoryCRUDController {
 
-    AlertManager alertManager;
-    ValidationUtility validationUtility;
-    CategoryService categoryService;
-    HttpServletResponse httpServletResponse;
-    CategoryRepository categoryRepository;
+    private final AlertManager alertManager;
+    private final ValidationUtility validationUtility;
+    private final CategoryService categoryService;
+    private final HttpServletResponse httpServletResponse;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
     public CategoryCRUDController(AlertManager alertManager, ValidationUtility validationUtility, CategoryService categoryService, HttpServletResponse httpServletResponse, CategoryRepository categoryRepository ){
@@ -80,6 +81,7 @@ public class CategoryCRUDController {
                                    @PathVariable(required = false) String categoryURL,
                                    HttpServletResponse httpServletResponse, Model model ){
 
+
         if (categoryURL==null||categoryURL.isEmpty()||categoryCUForm.getCategoryID()==null){
             alertManager.addAlert(new Alert("Nie sprecyzowano kategorii do edycji !!!", Alert.AlertType.WARNING));
             httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -89,7 +91,7 @@ public class CategoryCRUDController {
             model.addAttribute("atr_alertManager", alertManager);
             if (validationUtility.ConvertValidationErrors(bindingResult, alertManager)) {
 
-                if (categoryService.editCategory(categoryCUForm, categoryCUForm.getCategoryID())) {
+                if (categoryService.editCategory(categoryCUForm)) {
                     httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
                     //httpServletResponse.setHeader();
                 } else {

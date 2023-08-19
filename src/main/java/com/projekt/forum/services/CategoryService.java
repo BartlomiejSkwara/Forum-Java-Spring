@@ -16,24 +16,21 @@ import java.util.Optional;
 public class CategoryService {
     CategoryRepository categoryRepository;
     AlertManager alertManager;
-    EntityManager entityManager;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository, AlertManager alertManager, EntityManager entityManager) {
+    public CategoryService(CategoryRepository categoryRepository, AlertManager alertManager) {
         this.categoryRepository = categoryRepository;
         this.alertManager = alertManager;
-        this.entityManager = entityManager;
     }
 
 
-    //TODO wprowdz zmiany w strukturze bd
     @Transactional
-    public boolean editCategory(CategoryCUForm categoryCUForm, Integer categoryID){
+    public boolean editCategory(CategoryCUForm categoryCUForm){
 
-        Optional<CategoryEntity> existingEntity = categoryRepository.findByCategoryID(categoryID);
+        Optional<CategoryEntity> existingEntity = categoryRepository.findByCategoryID(categoryCUForm.getCategoryID());
         if (existingEntity.isPresent()){
             categoryRepository.save(new CategoryEntity(categoryCUForm));
-            alertManager.addAlert(new Alert("Edycja kategorii " + categoryID + " zakończona sukcesem", Alert.AlertType.SUCCESS));
+            alertManager.addAlert(new Alert("Edycja kategorii " + categoryCUForm.getCategoryID() + " zakończona sukcesem", Alert.AlertType.SUCCESS));
             return true;
         }
         else {
@@ -44,20 +41,16 @@ public class CategoryService {
 
     }
 
-    private boolean deleteWithResponse(String categoryURL){
-        Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryURL);
-        if (categoryEntity.isPresent()){
-            categoryRepository.delete(categoryEntity.get());
-            return true;
-        }
 
-        return false;
-    }
     public void deleteCategory(String categoryURL){
         if (categoryURL!=null)
         {
-            if(deleteWithResponse(categoryURL))
+
+            Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryURL);
+
+            if(categoryEntity.isPresent())
             {
+                categoryRepository.delete(categoryEntity.get());
                 alertManager.addAlert(new Alert("Poprawnie usunięto kategorię: "+categoryURL, Alert.AlertType.SUCCESS));
             }else
             {
@@ -74,22 +67,14 @@ public class CategoryService {
 
         if(categoryRepository.findByName(categoryCUForm.getCategoryName()).isEmpty())
         {
-
-                categoryRepository.save(new CategoryEntity(categoryCUForm));
-                alertManager.addAlert(new Alert("Poprawnie dodano kategorię "+categoryCUForm.getCategoryName(), Alert.AlertType.SUCCESS));
-
-
+            categoryRepository.save(new CategoryEntity(categoryCUForm));
+            alertManager.addAlert(new Alert("Poprawnie dodano kategorię "+categoryCUForm.getCategoryName(), Alert.AlertType.SUCCESS));
+            return true;
         }
         else
         {
             alertManager.addAlert(new Alert("Kategoria o podanej nazwie już istnieje !!! ", Alert.AlertType.WARNING));
             return false;
         }
-
-
-
-        return true;
-
-        //return this.categoryRepository.save(new CategoryEntity(categoryCUForm))!=null;
     }
 }
