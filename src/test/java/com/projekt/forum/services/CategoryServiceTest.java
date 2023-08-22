@@ -64,7 +64,7 @@ public class CategoryServiceTest {
 
     @Test()
     public void editCategory_WhenNotFoundInDB() {
-        when(categoryRepository.findByCategoryID(categoryCUFormEdit.getCategoryID())).thenReturn(Optional.empty());
+        when(categoryRepository.findById(categoryCUFormEdit.getCategoryID())).thenReturn(Optional.empty());
         Assertions.assertFalse(categoryService.editCategory(categoryCUFormEdit));
         verify(alertManager).addAlert(new Alert("Próbowałeś zmienić nie istniejącą kategorię !!!", Alert.AlertType.DANGER));
 
@@ -72,7 +72,7 @@ public class CategoryServiceTest {
 
     @Test
     public void editCategory_WhenFoundInDB(){
-        when(categoryRepository.findByCategoryID(categoryCUFormEdit.getCategoryID())).thenReturn(Optional.of(categoryEntity));
+        when(categoryRepository.findById(categoryCUFormEdit.getCategoryID())).thenReturn(Optional.of(categoryEntity));
         Assertions.assertTrue(categoryService.editCategory(categoryCUFormEdit));
         verify(alertManager).addAlert(new Alert("Edycja kategorii " + categoryCUFormEdit.getCategoryID() + " zakończona sukcesem", Alert.AlertType.SUCCESS));
     }

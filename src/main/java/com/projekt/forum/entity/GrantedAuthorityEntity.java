@@ -8,7 +8,7 @@ import org.springframework.util.Assert;
 import java.util.Objects;
 
 @Entity
-@Table(schema = "forum", name = "role")
+@Table(/*schema = "forum",*/ name = "role")
 public class GrantedAuthorityEntity implements GrantedAuthority {
 
 

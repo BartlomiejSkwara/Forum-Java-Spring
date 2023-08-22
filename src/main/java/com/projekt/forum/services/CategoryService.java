@@ -27,7 +27,7 @@ public class CategoryService {
     @Transactional
     public boolean editCategory(CategoryCUForm categoryCUForm){
 
-        Optional<CategoryEntity> existingEntity = categoryRepository.findByCategoryID(categoryCUForm.getCategoryID());
+        Optional<CategoryEntity> existingEntity = categoryRepository.findById(categoryCUForm.getCategoryID());
         if (existingEntity.isPresent()){
             categoryRepository.save(new CategoryEntity(categoryCUForm));
             alertManager.addAlert(new Alert("Edycja kategorii " + categoryCUForm.getCategoryID() + " zakończona sukcesem", Alert.AlertType.SUCCESS));
@@ -42,7 +42,7 @@ public class CategoryService {
     }
 
 
-    public void deleteCategory(String categoryURL){
+    public boolean deleteCategory(String categoryURL){
         if (categoryURL!=null)
         {
 
@@ -52,6 +52,7 @@ public class CategoryService {
             {
                 categoryRepository.delete(categoryEntity.get());
                 alertManager.addAlert(new Alert("Poprawnie usunięto kategorię: "+categoryURL, Alert.AlertType.SUCCESS));
+                return true;
             }else
             {
                 alertManager.addAlert(new Alert("Nie powiodło się usunięcie kategorii: "+categoryURL, Alert.AlertType.DANGER));
@@ -61,6 +62,7 @@ public class CategoryService {
         {
             alertManager.addAlert(new Alert("Nie sprecyzowano ID kategorii do usunięcia !!!", Alert.AlertType.WARNING));
         }
+        return false;
     }
 
     public boolean addCategory(CategoryCUForm categoryCUForm) {

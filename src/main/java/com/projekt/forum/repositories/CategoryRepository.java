@@ -10,10 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface CategoryRepository extends ListCrudRepository<CategoryEntity,String> {
+public interface CategoryRepository extends ListCrudRepository<CategoryEntity,Integer> {
     List<CategoryEntity> findAll();
     Optional<CategoryEntity> findByName(String name);
-    Optional<CategoryEntity> findByCategoryID(Integer idcategory);
     Optional<CategoryEntity> findByUrl(String url);
 
 

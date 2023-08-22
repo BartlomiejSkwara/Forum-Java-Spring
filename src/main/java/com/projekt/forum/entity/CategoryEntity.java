@@ -2,17 +2,18 @@ package com.projekt.forum.entity;
 
 import com.projekt.forum.dataTypes.forms.CategoryCUForm;
 import jakarta.persistence.*;
+import org.springframework.context.annotation.Profile;
 
 import java.util.Objects;
 
 @Entity
-@Table(schema = "forum", name = "category")
+@Table(/*schema = "forum",*/ name = "category")
 public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idcategory")
-    private int categoryID;
+    private Integer categoryID;
 
     @Column(name = "url" , length = 45)
     private String url;
@@ -64,9 +65,9 @@ public class CategoryEntity {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+//    public void setUrl(String url) {
+//        this.url = url;
+//    }
 
     public String getName() {
         return name;
@@ -74,6 +75,7 @@ public class CategoryEntity {
 
     public void setName(String name) {
         this.name = name;
+        this.url = this.name.toLowerCase().replace(' ','-');
     }
 
     public String getDescription() {

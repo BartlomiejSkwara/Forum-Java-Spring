@@ -11,7 +11,6 @@ import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,6 +44,7 @@ public class CategoryCRUDController {
     public String deleteCategory(@PathVariable(required = false) String categoryURL ) throws IOException {
 
         categoryService.deleteCategory(categoryURL);
+
         return "redirect:/";
     }
 

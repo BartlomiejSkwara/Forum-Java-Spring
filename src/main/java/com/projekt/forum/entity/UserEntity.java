@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity()
-@Table(name = "user", schema = "forum")
+@Table(name = "user_data"/*,schema = "forum"*/)
 public class UserEntity implements UserDetails {
     @Override
     public boolean equals(Object o) {
