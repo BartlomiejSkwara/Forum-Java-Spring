@@ -17,10 +17,10 @@
                 onsubmit="ajaxPostFormWithPathParam('CUform','/editCategory/','content'); return false;"
                 th:attr="pathParam=${atr_editedCategoryURL}">
 
-            <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}">
-            <input type="hidden" th:name="categoryID" th:value="${atr_previousForm==null}?'':${atr_previousForm.getCategoryID()}">
+            <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}"></input>
+            <input type="hidden" th:name="categoryID" th:value="${atr_previousForm==null}?'':${atr_previousForm.getCategoryID()}"></input>
 
-            <h1 class="h3 mb-5 fw-normal display-5" ><br>
+            <h1 class="h3 mb-5 fw-normal display-5" ><br></br>
                 <span th:text="${atr_title}"></span>
                 <th:block th:if="${atr_category != null}">
                     <b class="text-primary" th:text="${atr_editedID}"></b>
@@ -30,7 +30,7 @@
           <div class="mx-auto mb-3 " style="width: 21rem;">
             <label for="categoryName" class="form-label">Nazwa Kategorii</label>
             <input type="text" class="form-control" name="categoryName" id="categoryName"  maxlength="45" aria-describedby="categoryNameHelp"
-                   th:value="${atr_previousForm==null}?'':${atr_previousForm.getCategoryName()}">
+                   th:value="${atr_previousForm==null}?'':${atr_previousForm.getCategoryName()}"></input>
               <!--                   ${atr_category == null}? ${atr_categoryForm.getName()}:${atr_category.getName()}-->
             <div id="categoryNameHelp" class="form-text">Tak będzie nazywała się kategoria.</div>
           </div>

@@ -8,10 +8,7 @@ function confirmLink(link,message) {
 	}
 }
 
-
-
-
-
+///////TODO tutaj możliwe że trzeba będzie zmienić coś ze status codem jak we wcześniejszych
 function ajaxPostFormPagination(id_form,url,id_to_reload)
 {
     
@@ -32,6 +29,7 @@ function ajaxPostFormPagination(id_form,url,id_to_reload)
 	xmlHttp.onreadystatechange = function() {
 
 		if (xmlHttp.readyState == 4 ){
+
 			if (xmlHttp.status == 500 || xmlHttp.status == 201){
 				document.body.innerHTML = xmlHttp.responseText;
 			}
@@ -56,10 +54,12 @@ function ajaxPostForm(id_form,url,id_to_reload)
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 ){
-			if (xmlHttp.status == 500 || xmlHttp.status == 201){
-				document.body.innerHTML = xmlHttp.responseText;
+			if (xmlHttp.getResponseHeader("Ajax_insert_param") == "NEW_PAGE" || xmlHttp.getResponseHeader("Ajax_insert_param") == null ){
+				//document.body.innerHTML = xmlHttp.responseText;
+				window.location.href = xmlHttp.getResponseHeader("Location");
+
 			}
-			if(xmlHttp.status == 200) {
+			else if(xmlHttp.getResponseHeader("Ajax_insert_param") == "INSERT_PAGE") {
 				document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
 			}
 		}
@@ -80,15 +80,17 @@ function  ajaxPostFormWithPathParam(id_form,url,id_to_reload)
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 ){
+
 			console.log("faza1");
 			console.log(xmlHttp.status);
-			if (xmlHttp.status == 500 || xmlHttp.status == 201){
-				console.log("get away");
-				console.log(xmlHttp.getResponseHeader("Location"));
-				console.log(xmlHttp.getAllResponseHeaders());
+			if (xmlHttp.getResponseHeader("Ajax_insert_param") == "NEW_PAGE" || xmlHttp.getResponseHeader("Ajax_insert_param") == null ){
+				// console.log("get away");
+				// console.log(xmlHttp.getResponseHeader("Location"));
+				// console.log(xmlHttp.getAllResponseHeaders());
+				//document.body.innerHTML = xmlHttp.responseText;
 				window.location.href = xmlHttp.getResponseHeader("Location");
 			}
-			if(xmlHttp.status == 200) {
+			else if(xmlHttp.getResponseHeader("Ajax_insert_param") == "INSERT_PAGE") {
 				console.log("stay");
 				document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
 			}
@@ -100,7 +102,7 @@ function  ajaxPostFormWithPathParam(id_form,url,id_to_reload)
 	xmlHttp.send(formData);
 }
 
-
+///////TODO tutaj możliwe że trzeba będzie zmienić coś ze status codem jak we wcześniejszych
 
 // Funkcja wysyłająca dane formularza identyfkowanego przez 'id_form', do podanego adresu 'url'.
 // Po otrzymaniu odpowiedzi wywoływana jest funkcja użytkownika podana jako 'user_function'.

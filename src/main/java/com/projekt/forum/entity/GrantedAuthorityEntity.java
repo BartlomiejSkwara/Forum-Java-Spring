@@ -16,6 +16,7 @@ public class GrantedAuthorityEntity implements GrantedAuthority {
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
     @Id()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "roleID")
     private Integer roleID;
 
@@ -23,30 +24,14 @@ public class GrantedAuthorityEntity implements GrantedAuthority {
     private String role;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "iduser")
-    private UserEntity user;
 
     public GrantedAuthorityEntity(){}
 
-    public GrantedAuthorityEntity(Integer roleID, String role, UserEntity user) {
+    public GrantedAuthorityEntity(String role) {
         Assert.hasText(role, "A granted authority textual representation is required");
-        this.roleID = roleID;
         this.role = role;
-        this.user = user;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GrantedAuthorityEntity that)) return false;
-        return Objects.equals(roleID, that.roleID) && Objects.equals(role, that.role) && Objects.equals(user, that.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(roleID, role, user);
-    }
 
     @Override
     public String getAuthority() {
@@ -63,11 +48,15 @@ public class GrantedAuthorityEntity implements GrantedAuthority {
     }
 
 
-    public UserEntity getUser() {
-        return user;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GrantedAuthorityEntity that)) return false;
+        return Objects.equals(roleID, that.roleID) && Objects.equals(role, that.role);
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    @Override
+    public int hashCode() {
+        return Objects.hash(roleID, role);
     }
 }

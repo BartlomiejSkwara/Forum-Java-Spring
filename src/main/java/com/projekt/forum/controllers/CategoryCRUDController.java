@@ -7,6 +7,7 @@ import com.projekt.forum.dataTypes.forms.CategoryCUForm;
 import com.projekt.forum.entity.CategoryEntity;
 import com.projekt.forum.repositories.CategoryRepository;
 import com.projekt.forum.services.CategoryService;
+import com.projekt.forum.utility.RequestUtility;
 import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -54,19 +55,18 @@ public class CategoryCRUDController {
 
         if (categoryURL==null||categoryURL.isEmpty()){
             alertManager.addAlert(new Alert("Nie wybrano kategorii do edycji !!!", Alert.AlertType.WARNING));
-
         }
         else {
 
             Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryURL);
             if (categoryEntity.isEmpty()){
                 alertManager.addAlert(new Alert("Nie można edytować nie istniejącej kategorii !!!", Alert.AlertType.WARNING));
-
             }
             else{
                 model.addAttribute("atr_title","Edycja Kategorii: "+categoryEntity.get().getName());
                 model.addAttribute("atr_previousForm",new CategoryCUForm(categoryEntity.get().getCategoryID(),categoryEntity.get().getName(),categoryEntity.get().getDescription()));
                 model.addAttribute("atr_editedCategoryURL",categoryURL);
+                httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 
                 return "CategoryEditing";
             }
@@ -76,33 +76,27 @@ public class CategoryCRUDController {
     }
 
     @PostMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryURL}"})
-    @ResponseStatus
     public String editCategoryPost(@Valid @ModelAttribute() CategoryCUForm categoryCUForm,BindingResult bindingResult,
                                    @PathVariable(required = false) String categoryURL,
-                                   HttpServletResponse httpServletResponse, Model model ){
+                                   Model model ){
 
+        httpServletResponse.addHeader(RequestUtility.AjaxInsertParam, RequestUtility.OperationReplace);
 
         if (categoryURL==null||categoryURL.isEmpty()||categoryCUForm.getCategoryID()==null){
             alertManager.addAlert(new Alert("Nie sprecyzowano kategorii do edycji !!!", Alert.AlertType.WARNING));
-            httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return "Home";
+            return "redirect:/";
         }
         else {
-            model.addAttribute("atr_alertManager", alertManager);
             if (validationUtility.ConvertValidationErrors(bindingResult, alertManager)) {
+                categoryService.editCategory(categoryCUForm);
+                return "redirect:/";
 
-                if (categoryService.editCategory(categoryCUForm)) {
-                    httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
-                    //httpServletResponse.setHeader();
-                } else {
-                    httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                }
-
-                return "Home";
             } else {
+                httpServletResponse.setHeader(RequestUtility.AjaxInsertParam, RequestUtility.OperationInsert);
                 model.addAttribute("atr_editedCategoryURL", categoryURL);
                 model.addAttribute("atr_title", "Edycja Kategorii: " + categoryURL);
                 model.addAttribute("atr_previousForm", categoryCUForm);
+                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return "CategoryEditing :: content";
             }
         }
@@ -113,6 +107,7 @@ public class CategoryCRUDController {
     public String addCategoryGet(Model model){
 
         model.addAttribute("atr_title", "Dodawanie Kategorii");
+        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
         return "CategoryCreation";
     }
 
@@ -122,12 +117,20 @@ public class CategoryCRUDController {
         model.addAttribute("atr_title", "Dodawanie Kategorii");
         if(validationUtility.ConvertValidationErrors(bindingResult,this.alertManager)){
             if (!categoryService.addCategory(categoryCUForm)){
+                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 model.addAttribute("atr_previousForm",categoryCUForm);
+            }else {
+                httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
+
             }
         }
         else {
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             model.addAttribute("atr_previousForm",categoryCUForm);
+
         }
+
+        httpServletResponse.addHeader(RequestUtility.AjaxInsertParam, RequestUtility.OperationInsert);
 
         model.addAttribute("atr_alertManager",alertManager);
         return "CategoryCreation :: content";

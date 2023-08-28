@@ -1,10 +1,9 @@
 package com.projekt.forum.entity;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
@@ -17,15 +16,14 @@ public class UserEntity implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return nonExpired == that.nonExpired && nonLocked == that.nonLocked && credentialsNonExpired == that.credentialsNonExpired && isEnabled == that.isEnabled && Objects.equals(iduser, that.iduser) && Objects.equals(authorities, that.authorities) && Objects.equals(password, that.password) && Objects.equals(username, that.username) && Objects.equals(creationDate, that.creationDate);
+        return nonExpired == that.nonExpired && nonLocked == that.nonLocked && credentialsNonExpired == that.credentialsNonExpired && isEnabled == that.isEnabled && Objects.equals(iduser, that.iduser) && Objects.equals(authority, that.authority) && Objects.equals(password, that.password) && Objects.equals(username, that.username) && Objects.equals(creationDate, that.creationDate);
     }
 
     public UserEntity(){
     }
 
-    public UserEntity(Integer id, Collection<GrantedAuthorityEntity> role, String password, String username, Date creationDate, boolean nonExpired, boolean nonLocked, boolean credentialsNonExpired, boolean isEnabled) {
-        this.iduser = id;
-        this.authorities = role;
+    public UserEntity( GrantedAuthorityEntity role, String password, String username, Date creationDate, boolean nonExpired, boolean nonLocked, boolean credentialsNonExpired, boolean isEnabled) {
+        this.authority = role;
         this.password = password;
         this.username = username;
         this.creationDate = creationDate;
@@ -33,20 +31,26 @@ public class UserEntity implements UserDetails {
         this.nonLocked = nonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.isEnabled = isEnabled;
+        this.authorityEntities = new ArrayList<>();
+        authorityEntities.add(role);
     }
+
+
 
     @Override
     public int hashCode() {
-        return Objects.hash(iduser, authorities, password, username, creationDate, nonExpired, nonLocked, credentialsNonExpired, isEnabled);
+        return Objects.hash(iduser, authority, password, username, creationDate, nonExpired, nonLocked, credentialsNonExpired, isEnabled);
     }
 
     @Id()
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "userIDGen")
-    @SequenceGenerator(name = "userIDGen", sequenceName = "userIDGen", initialValue = 34 )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.AUTO, generator = "userIDGen")
+    //@SequenceGenerator(name = "userIDGen", sequenceName = "userIDGen", initialValue = 34 )
     private Integer iduser;
 
-    @OneToMany(mappedBy = "user")
-    private Collection<GrantedAuthorityEntity> authorities;
+    @OneToOne()
+    @PrimaryKeyJoinColumn(name = "role_id")
+    private GrantedAuthorityEntity authority;
 
     @Column(name = "password")
     private String password;
@@ -60,6 +64,8 @@ public class UserEntity implements UserDetails {
     private Date creationDate;
 
     @Transient()
+    private Collection<GrantedAuthorityEntity> authorityEntities;
+    @Transient()
     private boolean nonExpired = true;
     @Transient()
     private boolean nonLocked = true;
@@ -68,10 +74,15 @@ public class UserEntity implements UserDetails {
     @Transient()
     private boolean isEnabled = true;
 
-    @Override
-    public Collection<GrantedAuthorityEntity> getAuthorities() {
-        return authorities;
+    @PostLoad()
+    void preAuthorityEntities(){
+        authorityEntities = new ArrayList<GrantedAuthorityEntity>();
+        authorityEntities.add(authority);
     }
+    public Collection<GrantedAuthorityEntity> getAuthorities() {
+        return authorityEntities;
+    }
+
 
 
     public Date getCreationDate() {
@@ -114,8 +125,14 @@ public class UserEntity implements UserDetails {
     }
 
 
-    public void setAuthorities(GrantedAuthorityEntity role) {
-        getAuthorities().add(role);
+    public void setAuthority(GrantedAuthorityEntity role) {
+        if (this.authorityEntities == null){
+            throw new RuntimeException("Authorities array was somehow not initialized");
+        }
+        else {
+            this.authorityEntities.clear();
+            this.authorityEntities.add(role);
+        }
     }
 
 

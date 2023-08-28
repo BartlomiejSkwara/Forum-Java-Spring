@@ -1,23 +1,13 @@
 package com.projekt.forum.repositories;
 
 import com.projekt.forum.entity.CategoryEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -28,16 +18,17 @@ import java.util.Optional;
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @Transactional()
-public class CategoryRepositoryTests {
+public class CategoryRepositoryTest {
 
     private  final  CategoryEntity categoryEntity1 = new CategoryEntity("muzyczka","opis muzyczki");
     private  final  CategoryEntity categoryEntity2 = new CategoryEntity("filmy","filmy itd");
 
 
-    @Autowired CategoryRepository categoryRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
-    public CategoryRepositoryTests(CategoryRepository categoryRepository) {
+    public CategoryRepositoryTest(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 

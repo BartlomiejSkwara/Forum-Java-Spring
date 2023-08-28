@@ -18,6 +18,7 @@
                 Jednak pamiętaj, że ważne jest zachowanie kultury i nieprzesadzanie z nieuprzejmościami. <br>
                 Bądź uprzejmy i szanuj innych uczestników rozmów. :><br>
             </p>
+
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 <!--                <button type="button" class="btn btn-primary btn-lg px-4 gap-3">Primary button</button>-->
 <!--                <button type="button" class="btn btn-outline-secondary btn-lg px-4">Secondary</button>-->
@@ -63,7 +64,7 @@
             <th:block th:each="cat: ${categories}">
                 <div class="card border-custom bg-dark-subtle m-2 " style="width: 18rem; height: 18rem;">
                     <!--                Removing and adding categories !!! admin only !!!-->
-                    <th:block sec:authorize=" hasRole('admin')">
+                    <th:block sec:authorize=" hasRole('ROLE_admin')">
                         <a th:href="@{'editCategory/'+${cat.getUrl()}}">
                         <span class="position-absolute top-0 start-80 translate-middle p-2 bg-primary rounded-circle border-primary-subtle btn">
                                 <img class=" mx-auto"  src="" th:src="@{~/images/icons/wrench.svg}" alt="" width="24" height="24" style="fill: red;">

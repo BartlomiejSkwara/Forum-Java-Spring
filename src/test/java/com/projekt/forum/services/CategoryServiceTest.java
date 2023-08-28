@@ -9,6 +9,10 @@ import com.projekt.forum.repositories.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
@@ -16,14 +20,17 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-
+@ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
 
 
     private TestRestTemplate testRestTemplate;
     private WebMvcTest webMvcTest;
+    @InjectMocks
     private CategoryService categoryService;
+    @Mock
     private CategoryRepository categoryRepository;
+    @Mock
     private AlertManager alertManager;
 
     private final String categoryURL = "muzyka-i-inne";
@@ -31,12 +38,12 @@ public class CategoryServiceTest {
     private final CategoryCUForm categoryCUFormEdit = new CategoryCUForm(333,"Muzyka", "tutaj mowa o muzyce");
     private final CategoryCUForm categoryCUFormAdd = new CategoryCUForm(null,"Muzyka", "tutaj mowa o muzyce");
 
-    @BeforeEach
-    void setup(){
-        categoryRepository = mock(CategoryRepository.class);
-        alertManager = mock(AlertManager.class);
-        categoryService = new CategoryService(categoryRepository,alertManager);
-    }
+//    @BeforeEach
+//    void setup(){
+//        categoryRepository = mock(CategoryRepository.class);
+//        alertManager = mock(AlertManager.class);
+//        categoryService = new CategoryService(categoryRepository,alertManager);
+//    }
 
     @Test()
     public void deleteCategoryParamNull() {
@@ -74,7 +81,7 @@ public class CategoryServiceTest {
     public void editCategory_WhenFoundInDB(){
         when(categoryRepository.findById(categoryCUFormEdit.getCategoryID())).thenReturn(Optional.of(categoryEntity));
         Assertions.assertTrue(categoryService.editCategory(categoryCUFormEdit));
-        verify(alertManager).addAlert(new Alert("Edycja kategorii " + categoryCUFormEdit.getCategoryID() + " zakończona sukcesem", Alert.AlertType.SUCCESS));
+        verify(alertManager).addAlert(new Alert("Edycja kategorii " + categoryCUFormEdit.getCategoryName() + " zakończona sukcesem", Alert.AlertType.SUCCESS));
     }
 
 

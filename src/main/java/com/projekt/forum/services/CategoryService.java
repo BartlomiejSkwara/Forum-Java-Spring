@@ -30,7 +30,7 @@ public class CategoryService {
         Optional<CategoryEntity> existingEntity = categoryRepository.findById(categoryCUForm.getCategoryID());
         if (existingEntity.isPresent()){
             categoryRepository.save(new CategoryEntity(categoryCUForm));
-            alertManager.addAlert(new Alert("Edycja kategorii " + categoryCUForm.getCategoryID() + " zakończona sukcesem", Alert.AlertType.SUCCESS));
+            alertManager.addAlert(new Alert("Edycja kategorii " + categoryCUForm.getCategoryName() + " zakończona sukcesem", Alert.AlertType.SUCCESS));
             return true;
         }
         else {
