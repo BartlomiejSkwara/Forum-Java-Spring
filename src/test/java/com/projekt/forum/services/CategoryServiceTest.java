@@ -34,8 +34,11 @@ public class CategoryServiceTest {
     private AlertManager alertManager;
 
     private final String categoryURL = "muzyka-i-inne";
-    private final CategoryEntity categoryEntity = new CategoryEntity("Muzyka i Inne","tutaj mowa o muzyce");
+    private final Integer categoryID = 333;
+    private final CategoryEntity categoryEntity = new CategoryEntity(333,"Muzyka i Inne","tutaj mowa o muzyce","muzyka-i-inne");
     private final CategoryCUForm categoryCUFormEdit = new CategoryCUForm(333,"Muzyka", "tutaj mowa o muzyce");
+    private final CategoryEntity categoryEntityDifferentIdSameName = new CategoryEntity(331,"Muzyka i Inne","tutaj mowa o muzyce","muzyka-i-inne");
+
     private final CategoryCUForm categoryCUFormAdd = new CategoryCUForm(null,"Muzyka", "tutaj mowa o muzyce");
 
 //    @BeforeEach
@@ -54,23 +57,24 @@ public class CategoryServiceTest {
 
     @Test()
     public void deleteCategory_WhenNotFoundInDB() {
-        when(categoryRepository.findByUrl(categoryURL)).thenReturn(Optional.empty());
+        when(categoryRepository.findById(categoryID)).thenReturn(Optional.empty());
 
-        categoryService.deleteCategory(categoryURL);
-        verify(alertManager).addAlert(new Alert("Nie powiodło się usunięcie kategorii: "+categoryURL, Alert.AlertType.DANGER));
+        categoryService.deleteCategory(categoryID);
+        verify(alertManager).addAlert(new Alert("Usunięcie kategorii nie powiodło się !!! ", Alert.AlertType.DANGER));
     }
 
     @Test
     public void deleteCategory_WhenFoundInDB(){
-        when(categoryRepository.findByUrl(categoryURL)).thenReturn(Optional.of(categoryEntity));
+        when(categoryRepository.findById(categoryID)).thenReturn(Optional.of(categoryEntity));
 
-        categoryService.deleteCategory(categoryURL);
-        verify(alertManager).addAlert(new Alert("Poprawnie usunięto kategorię: "+categoryURL, Alert.AlertType.SUCCESS));
+        categoryService.deleteCategory(categoryID);
+        verify(alertManager).addAlert(new Alert("Poprawnie usunięto kategorię: "+categoryEntity.getName(), Alert.AlertType.SUCCESS));
     }
 
 
     @Test()
     public void editCategory_WhenNotFoundInDB() {
+        when(categoryRepository.findByName(categoryCUFormEdit.getCategoryName())).thenReturn(Optional.of(categoryEntity));
         when(categoryRepository.findById(categoryCUFormEdit.getCategoryID())).thenReturn(Optional.empty());
         Assertions.assertFalse(categoryService.editCategory(categoryCUFormEdit));
         verify(alertManager).addAlert(new Alert("Próbowałeś zmienić nie istniejącą kategorię !!!", Alert.AlertType.DANGER));
@@ -78,10 +82,20 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void editCategory_WhenFoundInDB(){
+    public void editCategory_Success(){
+        when(categoryRepository.findByName(categoryCUFormEdit.getCategoryName())).thenReturn(Optional.of(categoryEntity));
         when(categoryRepository.findById(categoryCUFormEdit.getCategoryID())).thenReturn(Optional.of(categoryEntity));
         Assertions.assertTrue(categoryService.editCategory(categoryCUFormEdit));
         verify(alertManager).addAlert(new Alert("Edycja kategorii " + categoryCUFormEdit.getCategoryName() + " zakończona sukcesem", Alert.AlertType.SUCCESS));
+
+    }
+    @Test
+    public void editCategory_WhenNameIsADuplicate(){
+        when(categoryRepository.findByName(categoryCUFormEdit.getCategoryName())).thenReturn(Optional.of(categoryEntityDifferentIdSameName));
+        Assertions.assertFalse(categoryService.editCategory(categoryCUFormEdit));
+        verify(alertManager).addAlert(new Alert("Istnieje już kategoria o takiej nazwie !!!", Alert.AlertType.WARNING));
+
+
     }
 
 

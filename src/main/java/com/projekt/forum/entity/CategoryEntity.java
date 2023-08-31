@@ -25,9 +25,14 @@ public class CategoryEntity {
 
 
     public CategoryEntity(String name, String description) {
+        this(null,name,description,name.toLowerCase().replace(' ','-'));
+    }
+
+    public CategoryEntity(Integer categoryID, String name, String description, String url) {
         this.name = name;
-        this.url = this.name.toLowerCase().replace(' ','-');
+        this.url = url;
         this.description = description;
+        this.categoryID = categoryID;
     }
 
     ///

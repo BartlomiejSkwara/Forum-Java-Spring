@@ -5,7 +5,6 @@ import com.projekt.forum.dataTypes.AlertManager;
 import com.projekt.forum.dataTypes.forms.CategoryCUForm;
 import com.projekt.forum.entity.CategoryEntity;
 import com.projekt.forum.repositories.CategoryRepository;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +25,14 @@ public class CategoryService {
 
     @Transactional
     public boolean editCategory(CategoryCUForm categoryCUForm){
+        Optional<CategoryEntity> existingEntity = categoryRepository.findByName(categoryCUForm.getCategoryName());
+        if (existingEntity.isPresent()&&existingEntity.get().getCategoryID()!=categoryCUForm.getCategoryID()){
+            alertManager.addAlert(new Alert("Istnieje już kategoria o takiej nazwie !!!", Alert.AlertType.WARNING));
+            return false;
+        }
 
-        Optional<CategoryEntity> existingEntity = categoryRepository.findById(categoryCUForm.getCategoryID());
+
+        existingEntity = categoryRepository.findById(categoryCUForm.getCategoryID());
         if (existingEntity.isPresent()){
             categoryRepository.save(new CategoryEntity(categoryCUForm));
             alertManager.addAlert(new Alert("Edycja kategorii " + categoryCUForm.getCategoryName() + " zakończona sukcesem", Alert.AlertType.SUCCESS));
@@ -42,20 +47,20 @@ public class CategoryService {
     }
 
 
-    public boolean deleteCategory(String categoryURL){
-        if (categoryURL!=null)
+    public boolean deleteCategory(Integer categoryID){
+        if (categoryID!=null)
         {
 
-            Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryURL);
+            Optional<CategoryEntity> categoryEntity = categoryRepository.findById(categoryID);
 
             if(categoryEntity.isPresent())
             {
                 categoryRepository.delete(categoryEntity.get());
-                alertManager.addAlert(new Alert("Poprawnie usunięto kategorię: "+categoryURL, Alert.AlertType.SUCCESS));
+                alertManager.addAlert(new Alert("Poprawnie usunięto kategorię: "+categoryEntity.get().getName(), Alert.AlertType.SUCCESS));
                 return true;
             }else
             {
-                alertManager.addAlert(new Alert("Nie powiodło się usunięcie kategorii: "+categoryURL, Alert.AlertType.DANGER));
+                alertManager.addAlert(new Alert("Usunięcie kategorii nie powiodło się !!! ", Alert.AlertType.DANGER));
             }
         }
         else

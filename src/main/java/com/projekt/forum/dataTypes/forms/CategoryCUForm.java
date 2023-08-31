@@ -1,6 +1,7 @@
 package com.projekt.forum.dataTypes.forms;
 
 import com.projekt.forum.utility.ValidationUtility;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -28,11 +29,13 @@ public class CategoryCUForm {
     String categoryDescription;
 
     Integer categoryID;
+    String categoryUrl;
 
     public CategoryCUForm(Integer categoryID, String categoryName, String categoryDescription){
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
         this.categoryID = categoryID;
+        this.categoryUrl = this.categoryName.toLowerCase().replace(' ','-');
     }
 
 
@@ -45,4 +48,11 @@ public class CategoryCUForm {
     }
 
     public Integer getCategoryID(){return  categoryID;}
+
+    public String getCategoryUrl() {
+        return categoryUrl;
+    }
+
+
+
 }

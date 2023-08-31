@@ -7,14 +7,12 @@
 <body>
 
 
-
-
     <th:block th:fragment="content">
       <div class = "d-flex w-100 h-100 p-3 mx-auto flex-column">
 
         <div class= "text-center mx-auto mt-auto dark">
           <form id= "CUform"
-                onsubmit="ajaxPostFormWithPathParam('CUform','/editCategory/','content'); return false;"
+                onsubmit="ajaxPostFormWithPathParam('CUform','/editCategory','content'); return false;"
                 th:attr="pathParam=${atr_editedCategoryURL}">
 
             <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}"></input>

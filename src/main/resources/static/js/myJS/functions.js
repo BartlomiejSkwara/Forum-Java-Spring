@@ -8,6 +8,20 @@ function confirmLink(link,message) {
 	}
 }
 
+function consumeInnerHtmlOrRedirect(xmlHttp,id_to_reload){
+	if (xmlHttp.getResponseHeader("Ajax_insert_param") == "NEW_PAGE" || xmlHttp.getResponseHeader("Ajax_insert_param") == null ){
+		//document.body.innerHTML = xmlHttp.responseText;
+		console.log(xmlHttp);
+		console.log();
+		window.location.href = xmlHttp.getResponseHeader("Ajax_redirection");
+		//document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
+
+	}
+	else if(xmlHttp.getResponseHeader("Ajax_insert_param") == "INSERT_PAGE") {
+		document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
+	}
+}
+
 ///////TODO tutaj możliwe że trzeba będzie zmienić coś ze status codem jak we wcześniejszych
 function ajaxPostFormPagination(id_form,url,id_to_reload)
 {
@@ -29,13 +43,7 @@ function ajaxPostFormPagination(id_form,url,id_to_reload)
 	xmlHttp.onreadystatechange = function() {
 
 		if (xmlHttp.readyState == 4 ){
-
-			if (xmlHttp.status == 500 || xmlHttp.status == 201){
-				document.body.innerHTML = xmlHttp.responseText;
-			}
-			if(xmlHttp.status == 200) {
-				document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
-			}
+			consumeInnerHtmlOrRedirect(xmlHttp,id_to_reload);
 		}
 	}
     xmlHttp.open("POST", url, true); 
@@ -54,14 +62,7 @@ function ajaxPostForm(id_form,url,id_to_reload)
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 ){
-			if (xmlHttp.getResponseHeader("Ajax_insert_param") == "NEW_PAGE" || xmlHttp.getResponseHeader("Ajax_insert_param") == null ){
-				//document.body.innerHTML = xmlHttp.responseText;
-				window.location.href = xmlHttp.getResponseHeader("Location");
-
-			}
-			else if(xmlHttp.getResponseHeader("Ajax_insert_param") == "INSERT_PAGE") {
-				document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
-			}
+			consumeInnerHtmlOrRedirect(xmlHttp,id_to_reload);
 		}
 
 	}
@@ -80,29 +81,18 @@ function  ajaxPostFormWithPathParam(id_form,url,id_to_reload)
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 ){
-
 			console.log("faza1");
 			console.log(xmlHttp.status);
-			if (xmlHttp.getResponseHeader("Ajax_insert_param") == "NEW_PAGE" || xmlHttp.getResponseHeader("Ajax_insert_param") == null ){
-				// console.log("get away");
-				// console.log(xmlHttp.getResponseHeader("Location"));
-				// console.log(xmlHttp.getAllResponseHeaders());
-				//document.body.innerHTML = xmlHttp.responseText;
-				window.location.href = xmlHttp.getResponseHeader("Location");
-			}
-			else if(xmlHttp.getResponseHeader("Ajax_insert_param") == "INSERT_PAGE") {
-				console.log("stay");
-				document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
-			}
+			consumeInnerHtmlOrRedirect(xmlHttp,id_to_reload);
 		}
 
 	}
 
-	xmlHttp.open("POST", url.concat(pathParam), true);
+	url=url.concat(pathParam);
+	xmlHttp.open("POST", url, true);
 	xmlHttp.send(formData);
 }
 
-///////TODO tutaj możliwe że trzeba będzie zmienić coś ze status codem jak we wcześniejszych
 
 // Funkcja wysyłająca dane formularza identyfkowanego przez 'id_form', do podanego adresu 'url'.
 // Po otrzymaniu odpowiedzi wywoływana jest funkcja użytkownika podana jako 'user_function'.
@@ -131,7 +121,6 @@ function ajaxPostFormEx(id_form,url,user_function)
 // Jeśli podano parametr 'interval' >0 (sekundy), to po otrzymaniu odpowiedzi po upływie podanego
 // interwału odświeżanie zostanie automatycznie ponowione (tzw. AJAX pooling).
 
-///////TODO tutaj możliwe że trzeba będzie zmienić coś ze status codem jak we wcześniejszych
 function ajaxReloadElement(id_element,url,interval=0) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {

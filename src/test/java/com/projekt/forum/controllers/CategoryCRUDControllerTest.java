@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Optional;
 
@@ -88,6 +89,7 @@ class CategoryCRUDControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attributeExists("atr_alertManager"))
                 .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("atr_previousForm"))
                 .andExpect(MockMvcResultMatchers.view().name("CategoryCreation :: content"))
+
                 ;
 
 
@@ -148,25 +150,26 @@ class CategoryCRUDControllerTest {
         mockMvc.perform(get("/editCategory").with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/"));
-        verify(alertManager).addAlert(new Alert("Nie wybrano kategorii do edycji !!!", Alert.AlertType.WARNING));
+        verify(alertManager).addAlert(new Alert("Nie wybrano w poprawny sposób kategorii do edycji !!!", Alert.AlertType.WARNING));
 
     }
 
     @Test
     void editCategory_get_WrongId() throws Exception{
-        when(categoryRepository.findByUrl(testUrlID)).thenReturn(Optional.empty());
-        mockMvc.perform(get("/editCategory/"+ testUrlID).with(csrf()))
+        when(categoryRepository.findById(Integer.getInteger(testID))).thenReturn(Optional.empty());
+        mockMvc.perform(get("/editCategory/"+ testUrlID+"?id="+testID).with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/"));
         verify(alertManager).addAlert(new Alert("Nie można edytować nie istniejącej kategorii !!!", Alert.AlertType.WARNING));
+
     }
 
     @Test
     void editCategory_get_CategoryFound() throws Exception{
         CategoryEntity testEntity = new CategoryEntity(testUrlID,"opis");
         testEntity.setCategoryID(2);
-        when(categoryRepository.findByUrl(testUrlID)).thenReturn(Optional.of(testEntity));
-        mockMvc.perform(get("/editCategory/"+ testUrlID).with(csrf()))
+        when(categoryRepository.findById(testEntity.getCategoryID())).thenReturn(Optional.of(testEntity));
+        mockMvc.perform(get("/editCategory/"+testUrlID+"?id="+testEntity.getCategoryID()).with(csrf()))
                 .andExpect(MockMvcResultMatchers.xpath("//input[@name='"+nameParamName+"']").exists())
                 .andExpect(MockMvcResultMatchers.xpath("//textarea[@name='"+descParamName+"']").exists())
                 .andExpect(MockMvcResultMatchers.xpath("//input[@name='"+idParamName+"']").exists())
@@ -179,20 +182,21 @@ class CategoryCRUDControllerTest {
 
 
     @Test
-    void editCategory_post_WrongUrl() throws Exception{
+    void editCategory_post_NoID() throws Exception{
 
         MockHttpServletRequestBuilder message = post("/editCategory")
                 .with(csrf())
                 .param(nameParamName,nameValue)
                 .param(descParamName,descValue)
-                .param(idParamName,testID);
+                ;
 
 
         mockMvc.perform(message)
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.view().name("Blank"))
                 .andExpect(MockMvcResultMatchers.header().exists(RequestUtility.AjaxInsertParam))
                 .andExpect(MockMvcResultMatchers.header().string(RequestUtility.AjaxInsertParam,RequestUtility.OperationReplace))
+                .andExpect(MockMvcResultMatchers.header().exists(RequestUtility.AjaxNewPageUrlParamName))
 
         ;
 
@@ -242,10 +246,11 @@ class CategoryCRUDControllerTest {
         when(categoryService.editCategory(ArgumentMatchers.any(CategoryCUForm.class))).thenReturn(true);
 
         mockMvc.perform(message)
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("Blank"))
                 .andExpect(MockMvcResultMatchers.header().exists(RequestUtility.AjaxInsertParam))
-                .andExpect(MockMvcResultMatchers.header().string(RequestUtility.AjaxInsertParam, RequestUtility.OperationReplace))
+                .andExpect(MockMvcResultMatchers.header().string(RequestUtility.AjaxInsertParam,RequestUtility.OperationReplace))
+                .andExpect(MockMvcResultMatchers.header().exists(RequestUtility.AjaxNewPageUrlParamName))
         ;
 
 
