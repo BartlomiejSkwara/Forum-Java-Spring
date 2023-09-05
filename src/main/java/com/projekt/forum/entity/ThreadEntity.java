@@ -16,10 +16,10 @@ public class ThreadEntity {
     @Column(name="topic", length = 45)
     String topic;
     @Column(name="creation_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     Date creationDate;
     @Column(name="update_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     Date updateDate;
     @ManyToOne()
     @JoinColumn(name="category_id")

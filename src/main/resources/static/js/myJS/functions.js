@@ -22,13 +22,15 @@ function consumeInnerHtmlOrRedirect(xmlHttp,id_to_reload){
 	}
 }
 
-///////TODO tutaj możliwe że trzeba będzie zmienić coś ze status codem jak we wcześniejszych
-function ajaxPostFormPagination(id_form,url,id_to_reload)
+function ajaxPostFormPagination(id_form,id_to_reload)
 {
-    
+
     var form = document.getElementById(id_form);
     var formData = new FormData(form); 
-    
+
+	var action  = form.getAttribute("action");
+	console.log(action);
+
     var submitButton = event.submitter;
     if (submitButton) {
       var filterValue = submitButton.value;
