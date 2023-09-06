@@ -1,7 +1,5 @@
 package com.projekt.forum.dataTypes.pageResponse;
 
-import com.projekt.forum.dataTypes.ThreadDTO;
-
 import java.util.List;
 
 public class PageResponse<T>  {
@@ -40,6 +38,6 @@ public class PageResponse<T>  {
         this.maxOnPage = maxOnPage;
         this.totalResultsCount = totalResultsCount;
 
-        this.lastPage = (int)(Math.ceil((double)totalResultsCount/(double)maxOnPage));
+        this.lastPage = Math.floorDiv((int)totalResultsCount,maxOnPage);
     }
 }

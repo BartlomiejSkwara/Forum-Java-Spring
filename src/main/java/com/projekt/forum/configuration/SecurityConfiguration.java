@@ -17,6 +17,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -67,6 +68,11 @@ public class SecurityConfiguration {
 
                 ;
             });
+
+            http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer
+                    .ignoringRequestMatchers("/category/{categoryUrl}")
+
+            );
 
 //            http.httpBasic(httpSecurityHttpBasicConfigurer -> {httpSecurityHttpBasicConfigurer.})
 

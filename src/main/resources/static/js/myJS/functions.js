@@ -48,7 +48,7 @@ function ajaxPostFormPagination(id_form,id_to_reload)
 			consumeInnerHtmlOrRedirect(xmlHttp,id_to_reload);
 		}
 	}
-    xmlHttp.open("POST", url, true); 
+    xmlHttp.open("POST", action, true);
     xmlHttp.send(formData); 
 }
 
@@ -68,7 +68,7 @@ function ajaxPostForm(id_form,url,id_to_reload)
 		}
 
 	}
-    xmlHttp.open("POST", url, true); 
+    xmlHttp.open("POST", url, true);
     xmlHttp.send(formData); 
 }
 

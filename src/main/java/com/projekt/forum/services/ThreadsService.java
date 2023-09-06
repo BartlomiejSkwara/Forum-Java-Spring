@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class ThreadsService {
     private final ThreadRepository threadRepository;
-    private final Integer pageSize = 5;
+    private final Integer pageSize = 10;
 
     public ThreadsService(ThreadRepository threadRepository) {
         this.threadRepository = threadRepository;
