@@ -54,13 +54,13 @@ function ajaxPostFormPagination(id_form,id_to_reload)
 
 
 
-function ajaxPostForm(id_form,url,id_to_reload)
+function ajaxPostForm(id_form,id_to_reload)
 {
     
     var form = document.getElementById(id_form);
-    var formData = new FormData(form); 
-    
-    console.log(url);
+    var formData = new FormData(form);
+	var action  = form.getAttribute("action");
+
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 ){
@@ -68,7 +68,7 @@ function ajaxPostForm(id_form,url,id_to_reload)
 		}
 
 	}
-    xmlHttp.open("POST", url, true);
+    xmlHttp.open("POST", action, true);
     xmlHttp.send(formData); 
 }
 

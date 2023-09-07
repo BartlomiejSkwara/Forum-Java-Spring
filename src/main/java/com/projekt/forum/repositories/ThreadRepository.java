@@ -14,8 +14,9 @@ public interface ThreadRepository extends ListCrudRepository<ThreadEntity,Intege
 //    List<ThreadEntity> findAllByCategoryUrl(@Param("CategoryUrl") String categoryUrl);
 //    List<ThreadEntity> findAllByCategoryId(@Param("CategoryUrl") String categoryUrl);
 
-    @Query("SELECT new com.projekt.forum.dataTypes.ThreadDTO(t.idThread,t.topic, t.creationDate,t.messageCount, t.updateDate, t.userID.username) FROM ThreadEntity t WHERE t.categoryId.url = :url")
-    Page<ThreadDTO> findAllThreadsWithFilter(@Param("url") String categoryUrl, Pageable pageable);
+
+    @Query("SELECT new com.projekt.forum.dataTypes.ThreadDTO(t.idThread,t.topic, t.creationDate,t.messageCount, t.updateDate, t.userID.username) FROM ThreadEntity t WHERE t.categoryId.url = :url AND ((:topicFilter IS null) OR (t.topic LIKE CONCAT('%', :topicFilter, '%')))")
+    Page<ThreadDTO> findAllThreadsWithFilter(@Param("url") String categoryUrl, Pageable pageable, @Param("topicFilter") String topicFilter);
 
 //    t.idThread as idThread, t.topic as topic, t.creationDate as creationDate, t.messageCount as messageCount, t.updateDate as updateDate
 

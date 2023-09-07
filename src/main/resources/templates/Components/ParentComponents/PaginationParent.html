@@ -10,6 +10,7 @@
   <th:block th:fragment="PaginationParent(extraParams,formUrl)" >
     <form id="pagination-form" class = "mx-auto mb-0 bg-dark " th:action="${formUrl}"
           onsubmit="ajaxPostFormPagination('pagination-form','contentList'); return false">
+      <th:block th:replace="${extraParams}"></th:block>
       <nav class="mx-auto mt-3 mb-0   align-self-end  " aria-label="Page navigation example">
         <ul class="pagination mb-0">
           <th:block th:if="${atr_threads.getCurrentPage()!=0}">

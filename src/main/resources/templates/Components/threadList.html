@@ -1,5 +1,5 @@
 <!DOCTYPE html  >
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -20,11 +20,20 @@
 
             <span th:text="'Wiadomości: '+${thread.getMessageCount()}"></span>
             <!--   Gdy taki sam username jak twórca albo gdy admin         -->
-            <th:block>
-              <button class=" position-absolute top-0 start-80 btn btn-toolbar ms-auto mb-auto btn-danger border-danger-subtle  rounded-pill button-small " type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" aria-expanded="false" aria-controls="collapseFilter" data-bs-url="{url action='deleteThread'}" data-bs-id="{$categoryData["idCategory"]}/{$thread["idthread"]}">
-                <img class=" mx-auto " src="" th:src="@{~/images/icons/trash.svg}" alt="" width="16" height="16">
-                <span class="visually-hidden">Filtrowanie</span>
-              </button>
+            <th:block sec:authentication="!isAnonymous()">
+              <th:block sec:authentication=" hasRole('ROLE_admin')">
+                <button class=" position-absolute top-0 start-80 btn btn-toolbar ms-auto mb-auto btn-danger border-danger-subtle  rounded-pill button-small " type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" aria-expanded="false" aria-controls="collapseFilter" data-bs-url="{url action='deleteThread'}" th:data-bs-id="${atr_category.getUrl()}+${thread.getIdThread()}">
+                  <img class=" mx-auto " src="" th:src="@{~/images/icons/trash.svg}" alt="" width="16" height="16">
+                  <span class="visually-hidden">Filtrowanie</span>
+                </button>
+              </th:block>
+
+              <th:block th:if="${( #authentication.getName().equals(${thread.getUsername()}))}" sec:authentication=" hasRole('ROLE_user')">
+                <button class=" position-absolute top-0 start-80 btn btn-toolbar ms-auto mb-auto btn-danger border-danger-subtle  rounded-pill button-small " type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" aria-expanded="false" aria-controls="collapseFilter" data-bs-url="{url action='deleteThread'}" th:data-bs-id="${atr_category.getUrl()}+${thread.getIdThread()}">
+                  <img class=" mx-auto " src="" th:src="@{~/images/icons/trash.svg}" alt="" width="16" height="16">
+                  <span class="visually-hidden">Filtrowanie</span>
+                </button>
+              </th:block>
             </th:block>
           </div>
         </div>

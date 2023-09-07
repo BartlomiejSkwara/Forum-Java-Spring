@@ -1,0 +1,14 @@
+<!DOCTYPE html  >
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <th:block th:fragment="params">
+        <input type="hidden" name="sortBy" th:value="${atr_threads.getSortBy()}">
+        <input type="hidden" name="sortDirection" th:value="${atr_threads.getSortDirection()}">
+        <input type="hidden" name="filter" th:value="${atr_threads.getFilter()}">
+    </th:block>
+</body>
+</html>

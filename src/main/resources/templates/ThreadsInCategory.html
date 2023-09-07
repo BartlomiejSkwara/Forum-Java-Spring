@@ -39,7 +39,6 @@
 
             </div>
 
-
             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content text-center">
@@ -61,16 +60,15 @@
                 </div>
             </div>
 
-
             <div class="collapse" id="collapseFilter">
                 <div class="text-center card card-body ju" >
 
-                    <form id="filter-form" onsubmit="ajaxPostForm('filter-form','/','contentList'); return false;">
+                    <form id="filter-form" th:action="@{/category/{categoryName}(categoryName=${atr_category.getUrl()})}" onsubmit="ajaxPostForm('filter-form','contentList'); return false;">
                         <label for="sortBy" class = " mb-2"><h5>Sortuj Według</h5></label>
                         <select name="sortBy" id="sortBy" class="form-select w-50 mx-auto " aria-label="Typ sortowania">
-                            <option value="update_date" checked >Ostatnia aktywność</option>
-                            <option value="creation_date" >Data powstania</option>
-                            <option value="message_count" >Ilość Wiadomości</option>
+                            <option value="updateDate" checked >Ostatnia aktywność</option>
+                            <option value="creationDate" >Data powstania</option>
+                            <option value="messageCount" >Ilość Wiadomości</option>
                             <option value="topic" >Alfabetycznie</option>
 
                         </select>
@@ -101,7 +99,7 @@
             <div id="contentList" class="list-group list-group-flush border-top mt-2 w-90 mx-auto">
                 <th:block th:fragment="content-list">
                     <th:block th:replace="~{Components/threadList ::threadList(${atr_threads})}"></th:block>
-                    <th:block th:replace="~{Components/ParentComponents/PaginationParent :: PaginationParent(null,@{/category/{categoryName}(categoryName=${atr_category.getUrl()})})}"></th:block>
+                    <th:block th:replace="~{Components/ParentComponents/PaginationParent :: PaginationParent(~{Components/CategoryExtraParams::params},@{/category/{categoryName}(categoryName=${atr_category.getUrl()})})}"></th:block>
                 </th:block>
 
             </div>
