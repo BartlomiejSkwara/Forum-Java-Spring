@@ -72,7 +72,8 @@
                             </span>
                         </a>
 
-                        <span class="position-absolute top-0 start-95 translate-middle p-2 bg-danger rounded-circle border-danger-subtle btn" data-bs-toggle="modal" data-bs-target="#deleteModal"   th:attr="data-bs-id=${cat.getUrl()}, data-bs-url=@{/}" >
+                        <span class="position-absolute top-0 start-95 translate-middle p-2 bg-danger rounded-circle border-danger-subtle btn" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                              th:data-bs-id="${cat.getCategoryID()} " th:data-bs-url="${'/deleteCategory'}" >
                         <img class=" mx-auto " src="" th:src="@{~/images/icons/trash.svg}" alt="" width="24" height="24" style="fill: red;">
                         <span class="visually-hidden">Remove Category</span>
                         </span>

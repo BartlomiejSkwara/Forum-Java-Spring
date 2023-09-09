@@ -3,17 +3,23 @@ package com.projekt.forum.controllers;
 import com.projekt.forum.dataTypes.AlertManager;
 import com.projekt.forum.dataTypes.forms.CategoryFilterForm;
 import com.projekt.forum.entity.CategoryEntity;
+import com.projekt.forum.entity.UserEntity;
 import com.projekt.forum.repositories.CategoryRepository;
 import com.projekt.forum.repositories.ThreadRepository;
 import com.projekt.forum.services.ThreadsService;
 import com.projekt.forum.utility.RequestUtility;
+import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Controller()
@@ -60,7 +66,8 @@ public class ThreadsController {
     @PostMapping(path = {"/category","/category/","/category/{categoryUrl}"})
     public String filterThreads(Model model,
                                 @PathVariable(required = false, name = "categoryUrl") String categoryUrl,
-                                @Valid @ModelAttribute() CategoryFilterForm categoryFilterForm)
+                                @Valid @ModelAttribute() CategoryFilterForm categoryFilterForm, BindingResult bindingResult,
+                                ValidationUtility validationUtility)
     {
         //TODO popraw działanie dodawania atrybutów do kolejneg przekierowania przy ajaxie , obecnie wogóle nie działą (chodzie o alerty)
         if(categoryUrl==null||categoryUrl.isEmpty()){
@@ -77,6 +84,7 @@ public class ThreadsController {
             return "Blank";
         }
 
+        validationUtility.ConvertValidationErrors(bindingResult,alertManager);
         //model.addAttribute("atr_title",categoryEntity.get().getName());
         model.addAttribute("atr_threads", threadsService.getThreadsByCategory(categoryUrl,categoryFilterForm));
         model.addAttribute("atr_alertManager", alertManager);
@@ -85,5 +93,18 @@ public class ThreadsController {
 
         return "ThreadsInCategory :: content-list";
     }
+
+
+    @GetMapping("/deleteThread")
+    public String deleteThread( @RequestParam(name = "id", required = false) Integer threadId,
+                                @RequestParam(name = "category",required = false) String category,
+                                @AuthenticationPrincipal UserDetails user) throws IOException {
+
+        threadsService.deleteThread(threadId,user);
+        if (category!=null)
+            return "redirect:/category/".concat(category);
+        return "redirect:/";
+    }
+
 
 }

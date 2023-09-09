@@ -44,7 +44,7 @@ public class CategoryCRUDController {
 
 
 
-    @GetMapping(path={"/deleteCategory/{categoryURL}","/deleteCategory","/deleteCategory/"})
+    @GetMapping("/deleteCategory")
     public String deleteCategory( @RequestParam(name = "id", required = false) Integer categoryId) throws IOException {
 
         categoryService.deleteCategory(categoryId);

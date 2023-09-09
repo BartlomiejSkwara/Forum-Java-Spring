@@ -1,6 +1,7 @@
 package com.projekt.forum.dataTypes.pageResponse;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,8 @@ public class PageResponse<T>  {
 
     public String getFilter() {
         return filter;
+
+
     }
 
     public void setValues(Integer currentPage, Integer maxOnPage, long totalResultsCount){
