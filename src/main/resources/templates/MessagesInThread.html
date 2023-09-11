@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html th:replace="~{Layout/mainLayout :: layout(~{::title},~{::content},false)}" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${atr_title}" th:fragment="title"></title>
+</head>
+  <body>
+    <th:block th:fragment="content">
+      <div class=" w-100 text-center ">
+        <h1 class ="mx-auto">
+          <p>Przeglądasz właśnie wątek</p>
+          <b class="text-primary">[[${atr_title}]]</b>
+
+<!--          <small class="h5 w-50">{$threadData["topic"]}</small>-->
+        </h1>
+      </div>
+
+      <div id="contentList" class=" list-group   list-group-flush  border-top border-white mt-2 col-lg-9 col-12 mx-auto  pb-0">
+        <th:block th:replace="~{Components/messageList :: messageList(${atr_messages}) }"></th:block>
+        <th:block th:replace="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}"></th:block>
+<!-- TODO       {include file="components/messagePostForm.tpl"}-->
+        <div class=" mx-auto">
+<!--  TODO         {include file="components/paginationThread.tpl"}-->
+        </div>
+      </div>
+      <script src="{$conf->app_url}/js/myJS/customDeleteModal.js"></script>
+      <script src="{$conf->app_url}/js/myJS/functions.js"></script>
+    </th:block>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+

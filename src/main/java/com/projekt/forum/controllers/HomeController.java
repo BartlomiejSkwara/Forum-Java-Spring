@@ -36,8 +36,6 @@ public class HomeController {
 
         model.addAttribute("categories",categoryRepository.findAll());
         model.addAttribute("atr_alertManager",alertManager);
-
         return "Home";
     }
-
 }

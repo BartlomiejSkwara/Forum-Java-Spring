@@ -1,0 +1,42 @@
+<!DOCTYPE html  >
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+  <body>
+    <div th:if="${messages!=null}" th:fragment="messageList(messages)" class="container mt-4 bg-body-tertiary py-3">
+
+        <div th:each="message:${messages}" class="row mb-4">
+            <div  th:class="${message.getAuthorName().equals(#authentication.getName())}?'col-10  offset-2':'col-10' ">
+              <div th:class="(${message.getAuthorName().equals(#authentication.getName())}?'border-activeUser border-end-0':'border-start-0') + ' px-0 py-0 row shadow-lg rounded-end p-3 d-flex text-break border'">
+              <div id="top" th:class="(${message.getAuthorName().equals(#authentication.getName())}?'bg-activeUser':'bg-light-subtles')+' col-12 col-lg-2 text-center d-lg-block d-flex align-items-center'">
+              <img class=" d-lg-block d-none mx-auto img-thumbnail mt-1" src="" th:src="@{~/images/icons/person-fill.svg}" alt="" width="64" height="64"></img>
+              <img class="d-lg-none  d-inline" src="" th:src="@{~/images/icons/person-fill.svg}" alt="" width="32" height="32"></img>
+
+              <p class=" mb-0 text-center" th:text="${message.getAuthorName()}"></p>
+
+              <span class="d-lg-none">:</span>
+
+
+              <div class="flex-grow-1 text-end text-secondary d-lg-none d-block align-self-baseline">
+                <div class = "d-sm-block d-none" th:text="${message.getCreationDate()}"></div>
+              </div>
+
+
+            </div>
+            <div class="col-12 bg-dark-subtle col-lg-10 border-start-0 border-secondary position-relative d-flex flex-column">
+              <div class="flex-grow-1" th:text="${message.getContent()}"></div>
+              <div class="text-end text-secondary d-none d-lg-block" th:text="${message.getCreationDate()}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+
+
+

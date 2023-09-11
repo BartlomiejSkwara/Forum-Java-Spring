@@ -1,4 +1,4 @@
-package com.projekt.forum.dataTypes;
+package com.projekt.forum.dataTypes.dto;
 
 import java.util.Date;
 import java.util.Objects;

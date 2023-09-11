@@ -30,8 +30,7 @@ public class ThreadEntity {
     @JoinColumn(name="user_id")
     UserEntity userID;
 
-    public ThreadEntity(){
-    }
+    public ThreadEntity(){}
 
     public ThreadEntity(String topic, Date creationDate, Date updateDate, CategoryEntity categoryId, Integer messageCount, UserEntity userID) {
         this.topic = topic;

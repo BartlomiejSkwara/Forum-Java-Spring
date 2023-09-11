@@ -2,20 +2,17 @@ package com.projekt.forum.services;
 
 import com.projekt.forum.dataTypes.Alert;
 import com.projekt.forum.dataTypes.AlertManager;
-import com.projekt.forum.dataTypes.ThreadDTO;
+import com.projekt.forum.dataTypes.dto.ThreadDTO;
 import com.projekt.forum.dataTypes.forms.CategoryFilterForm;
 import com.projekt.forum.dataTypes.pageResponse.PageResponse;
 import com.projekt.forum.entity.ThreadEntity;
-import com.projekt.forum.entity.UserEntity;
 import com.projekt.forum.repositories.ThreadRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;

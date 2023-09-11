@@ -6,10 +6,9 @@
 </head>
   <body>
     <div th:if="${threads!=null}" th:fragment="threadList(threads)" class="container ">
-      <th:block th:each="thread:${threads.getThreadDTOList()}">
-        <div class="py-3 row border-bottom  ">
+        <div th:each="thread:${threads.getThreadDTOList()}" class="py-3 row border-bottom  ">
           <div class="col-12 col-lg-6">
-            <a th:href="@{${'/'}+${thread.getIdThread()}}" class="link-success mb-1  link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><strong th:text="${thread.getTopic()}"></strong></a>
+            <a th:href="@{${'/thread/'}+${atr_category.getUrl()}+${'/'}+${thread.getIdThread()}}" class="link-success mb-1  link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><strong th:text="${thread.getTopic()}"></strong></a>
             <p class="">
               <b>Stworzył: </b> <span class="text-info" th:text="${thread.getUsername()}"></span>
               <b>Dnia: </b> <span th:text="${thread.getCreationDate()}"></span>
@@ -32,7 +31,6 @@
 
           </div>
         </div>
-      </th:block>
     </div>
   </body>
 </html>
