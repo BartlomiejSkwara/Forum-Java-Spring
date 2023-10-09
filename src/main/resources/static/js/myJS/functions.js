@@ -12,7 +12,7 @@ function consumeInnerHtmlOrRedirect(xmlHttp,id_to_reload){
 	if (xmlHttp.getResponseHeader("Ajax_insert_param") == "NEW_PAGE" || xmlHttp.getResponseHeader("Ajax_insert_param") == null ){
 		//document.body.innerHTML = xmlHttp.responseText;
 		console.log(xmlHttp);
-		console.log();
+		console.log(xmlHttp.getResponseHeader("Ajax_redirection"));
 		window.location.href = xmlHttp.getResponseHeader("Ajax_redirection");
 		//document.getElementById(id_to_reload).innerHTML = xmlHttp.responseText;
 

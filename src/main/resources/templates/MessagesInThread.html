@@ -10,21 +10,34 @@
         <h1 class ="mx-auto">
           <p>Przeglądasz właśnie wątek</p>
           <b class="text-primary">[[${atr_title}]]</b>
-
-<!--          <small class="h5 w-50">{$threadData["topic"]}</small>-->
         </h1>
       </div>
 
-      <div id="contentList" class=" list-group   list-group-flush  border-top border-white mt-2 col-lg-9 col-12 mx-auto  pb-0">
-        <th:block th:replace="~{Components/messageList :: messageList(${atr_messages}) }"></th:block>
-        <th:block th:replace="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}"></th:block>
-<!-- TODO       {include file="components/messagePostForm.tpl"}-->
-        <div class=" mx-auto">
-<!--  TODO         {include file="components/paginationThread.tpl"}-->
-        </div>
+      <div id="contentList"  class=" list-group   list-group-flush  border-top border-white mt-2 col-lg-9 col-12 mx-auto  pb-0">
+            <th:block th:fragment="threadContent">
+                <th:block th:replace="~{Components/messageList :: messageList(${atr_messages}) }"></th:block>
+                <th:block th:replace="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}"></th:block>
+
+                <form sec:authorize="isAuthenticated()" id = "messagePostFormA" class = "mx-auto text-center  w-90 border p-2 mt-2 mb-0"
+                      th:action="'/postMessage/'+${atr_threadID}"
+                      onsubmit="ajaxPostFormPagination('messagePostFormA','contentList'); return false;">
+                    <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}"></input>
+                    <div class="mx-auto w-75">
+                      <label for="message" class="form-label">Wyślij Wiadomość</label>
+                      <textarea class="form-control no-scroll " name="message" id="message" rows="3" maxlength="180" placeholder="Enter your message" ></textarea>
+                      <div id="messageHelp" class="form-text">Maksymalnie 180 znaków</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" >Wyślij</button>
+                </form>
+
+
+
+                <div class=" mx-auto">
+        <!--  TODO         {include file="components/paginationThread.tpl"}-->
+                </div>
+            </th:block>
       </div>
-      <script src="{$conf->app_url}/js/myJS/customDeleteModal.js"></script>
-      <script src="{$conf->app_url}/js/myJS/functions.js"></script>
+      <script src="" th:src="@{~/js/myJS/functions.js}"></script>
     </th:block>
   </body>
 </html>

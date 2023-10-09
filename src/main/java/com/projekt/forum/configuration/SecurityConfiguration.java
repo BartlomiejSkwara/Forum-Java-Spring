@@ -58,7 +58,9 @@ public class SecurityConfiguration {
                     .requestMatchers("/deleteCategory/**").hasRole("admin")
                     .requestMatchers("/addCategory").hasRole("admin")
                     .requestMatchers("/editCategory/**").hasRole("admin")
+                    .requestMatchers("/postMessage/**").hasAnyRole("admin","user")
                     .requestMatchers("/deleteThread/**").hasAnyRole("admin","user")
+
                     .anyRequest().permitAll();
             });
 

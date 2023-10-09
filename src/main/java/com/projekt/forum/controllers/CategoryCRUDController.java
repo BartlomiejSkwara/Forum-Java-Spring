@@ -142,7 +142,7 @@ public class CategoryCRUDController {
 
         }
 
-        httpServletResponse.addHeader(RequestUtility.AjaxInsertParam, RequestUtility.OperationInsert);
+        RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
 
         model.addAttribute("atr_alertManager",alertManager);
         return "CategoryCreation :: content";

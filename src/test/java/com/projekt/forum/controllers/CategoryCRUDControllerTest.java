@@ -259,7 +259,7 @@ class CategoryCRUDControllerTest {
     @Test
     void deleteCategory_Redirection() throws Exception{
 
-        mockMvc.perform(get("/deleteCategory/"+testUrlID).with(csrf()))
+        mockMvc.perform(get("/deleteCategory?id="+testID).with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/"))
               ;
