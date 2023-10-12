@@ -12,7 +12,7 @@
                     <img class="mb-4 img-fluid" src="" th:src="@{~/images/yuumsad.svg}" alt="" >
                 </div>
 
-                <th:block th:if="${atr_errMSG==null}">
+                <th:block th:if="${atr_alertManager==null}">
                     <h1>Drogi Użytkowniku </h1>
                     <hr>
                     <br>
@@ -28,8 +28,9 @@
                     <br>
                 </th:block>
 
-                <th:block th:unless="${atr_errMSG==null}">
-                    <h1 th:text="${atr_errMSG}"></h1>
+                <th:block th:unless="${atr_alertManager==null}">
+                    <th:block th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}">
+                    </th:block>
                 </th:block>
 
             </div>

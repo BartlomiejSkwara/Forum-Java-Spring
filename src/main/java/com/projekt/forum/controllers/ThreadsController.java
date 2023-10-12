@@ -1,5 +1,6 @@
 package com.projekt.forum.controllers;
 
+import com.projekt.forum.dataTypes.Alert;
 import com.projekt.forum.dataTypes.AlertManager;
 import com.projekt.forum.dataTypes.forms.CategoryFilterForm;
 import com.projekt.forum.entity.CategoryEntity;
@@ -45,13 +46,13 @@ public class ThreadsController {
                                  @PathVariable(required = false, name = "categoryUrl") String categoryUrl)
     {
         if(categoryUrl==null||categoryUrl.isEmpty()){
-            model.addAttribute("atr_errMSG","Drogi użytkowniku kategoria której szukasz nie istnieje :<");
-            return "Error";
+            alertManager.addAlert(new Alert("Drogi użytkowniku kategoria której szukasz nie istnieje :<", Alert.AlertType.DANGER));
+            return "redirect:/error";
         }
         Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryUrl);
         if(categoryEntity.isEmpty()){
-            model.addAttribute("atr_errMSG","Drogi użytkowniku kategoria której szukasz nie istnieje :<");
-            return "Error";
+            alertManager.addAlert(new Alert("Drogi użytkowniku kategoria której szukasz nie istnieje :<", Alert.AlertType.DANGER));
+            return "redirect:/error";
         }
 
         model.addAttribute("atr_title",categoryEntity.get().getName());
@@ -69,17 +70,16 @@ public class ThreadsController {
                                 @Valid @ModelAttribute() CategoryFilterForm categoryFilterForm, BindingResult bindingResult,
                                 ValidationUtility validationUtility)
     {
-        //TODO popraw działanie dodawania atrybutów do kolejneg przekierowania przy ajaxie , obecnie wogóle nie działą (chodzie o alerty)
         if(categoryUrl==null||categoryUrl.isEmpty()){
-            model.addAttribute("atr_errMSG","Drogi użytkowniku kategoria której szukasz nie istnieje :<");
-            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"Error");
+            alertManager.addAlert(new Alert("Drogi użytkowniku kategoria której szukasz nie istnieje :<", Alert.AlertType.DANGER));
+            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
 
             return "Blank";
         }
         Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryUrl);
         if(categoryEntity.isEmpty()){
-            model.addAttribute("atr_errMSG","Drogi użytkowniku kategoria której szukasz nie istnieje :<");
-            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"Error");
+            alertManager.addAlert(new Alert("Drogi użytkowniku kategoria której szukasz nie istnieje :<", Alert.AlertType.DANGER));
+            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
 
             return "Blank";
         }

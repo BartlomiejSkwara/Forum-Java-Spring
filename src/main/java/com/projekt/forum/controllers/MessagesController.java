@@ -77,8 +77,8 @@ public class MessagesController {
 
             if(threadId==null){
             //Może zniknąć i nie pokazać się na Error
-            model.addAttribute("atr_errMSG", "Próbowałeś dodać wiadomość do niestniejącego wątku");
-            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"Error");
+            alertManager.addAlert(new Alert("Próbowałeś dodać wiadomość do niestniejącego wątku", Alert.AlertType.DANGER));
+            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
 
             return "Blank";
         }
@@ -93,8 +93,8 @@ public class MessagesController {
             }
 
             //Może zniknąć i nie pokazać się na Error
-            model.addAttribute("atr_errMSG", "Wystąpił błąd podczas dodawania kategorii");
-            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"Error");
+            alertManager.addAlert(new Alert("Wystąpił błąd podczas dodawania kategorii", Alert.AlertType.DANGER));
+            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
 
             return "Blank";
 
