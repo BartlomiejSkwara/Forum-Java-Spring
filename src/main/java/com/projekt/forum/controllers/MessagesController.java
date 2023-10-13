@@ -11,15 +11,13 @@ import com.projekt.forum.utility.RequestUtility;
 import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -42,7 +40,9 @@ public class MessagesController {
     }
 
     @GetMapping("/thread/{categoryUrl}/{threadId}")
-    String viewMessages(@PathVariable() Integer threadId, Model model, @PathVariable String categoryUrl){
+    String viewMessages(@PathVariable() Integer threadId, Model model,
+                        @PathVariable String categoryUrl,
+                        @RequestParam(value = "page",defaultValue = "0") Integer page){
         if (threadId==null){
             model.addAttribute("atr_title", "Error");
             alertManager.addAlert(new Alert("Wybrano wątek w niepoprawny sposób", Alert.AlertType.WARNING));
@@ -59,7 +59,7 @@ public class MessagesController {
 
                 model.addAttribute("atr_threadID", threadId);
 
-                model.addAttribute("atr_messages", messageRepository.findByThreadEntity_IdThread(threadId));
+                model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,page));
 
             }
 
@@ -72,9 +72,9 @@ public class MessagesController {
     public String postMessage(@PathVariable( required = false, name = "threadId") Integer threadId,Model model,
                               @Valid() @ModelAttribute() MessagePostForm messagePostForm,
                               BindingResult bindingResult,
-                              @AuthenticationPrincipal UserDetails userDetails
+                              @AuthenticationPrincipal UserDetails userDetails,
+                              @RequestParam(value = "page",defaultValue = "0") Integer lastPage
     ){
-
             if(threadId==null){
             //Może zniknąć i nie pokazać się na Error
             alertManager.addAlert(new Alert("Próbowałeś dodać wiadomość do niestniejącego wątku", Alert.AlertType.DANGER));
@@ -86,13 +86,14 @@ public class MessagesController {
         if (validationUtility.ConvertValidationErrors(bindingResult,alertManager)){
             if(messageService.saveMessage(threadId,messagePostForm,userDetails.getUsername())) {
                 model.addAttribute("atr_threadID", threadId);
-                model.addAttribute("atr_messages", messageRepository.findByThreadEntity_IdThread(threadId));
+                model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,lastPage));
+
+                //model.addAttribute("atr_messages", messageRepository.findByThreadEntity_IdThread(threadId));
                 model.addAttribute("atr_alertManager", alertManager);
                 RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
                 return "MessagesInThread :: threadContent";
             }
 
-            //Może zniknąć i nie pokazać się na Error
             alertManager.addAlert(new Alert("Wystąpił błąd podczas dodawania kategorii", Alert.AlertType.DANGER));
             RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
 
@@ -101,7 +102,9 @@ public class MessagesController {
         }
 
         model.addAttribute("atr_alertManager", alertManager);
-        model.addAttribute("atr_messages", messageRepository.findByThreadEntity_IdThread(threadId));
+
+        model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,lastPage));
+        //model.addAttribute("atr_messages", messageRepository.findByThreadEntity_IdThread(threadId));
         model.addAttribute("atr_threadID", threadId);
         RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
         return "MessagesInThread :: threadContent";

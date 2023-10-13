@@ -16,8 +16,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
 
     @RequestMapping("/error")
     public String handleError(Model model){
-        ///TODO w przyszłości popraw zachowanie przy różnych typach alertów (tip. errory)
-        if (alertManager.size()!=0){
+        if (alertManager.containsDanger()){
             model.addAttribute("atr_alertManager",alertManager);
         }
         return "Error";

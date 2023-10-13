@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,10 +31,9 @@ public class ThreadsService {
     public PageResponse<ThreadDTO> getThreadsByCategory(String categoryUrl, Integer pageNumber, Sort.Direction sortDirection, String sortProperty ,String filter){
         Pageable pageable = PageRequest.of(pageNumber,pageSize, sortDirection, sortProperty);
         Page<ThreadDTO> threadDTOPage = threadRepository.findAllThreadsWithFilter(categoryUrl, pageable,filter);
-        List<ThreadDTO> threadDTOList = threadDTOPage.getContent();
 
         PageResponse<ThreadDTO> threadsPageResponse = new PageResponse<>();
-        threadsPageResponse.setThreadDTOList(threadDTOList);
+        threadsPageResponse.setDTOList(threadDTOPage);
         threadsPageResponse.setValues(pageNumber,pageSize,threadDTOPage.getTotalElements());
         threadsPageResponse.setSortingAndFilter(sortDirection,sortProperty,filter);
 

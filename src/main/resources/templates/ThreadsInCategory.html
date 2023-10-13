@@ -100,7 +100,10 @@
             <div id="contentList" class="list-group list-group-flush border-top mt-2 w-90 mx-auto">
                 <th:block th:fragment="content-list">
                     <th:block th:replace="~{Components/threadList ::threadList(${atr_threads})}"></th:block>
-                    <th:block th:replace="~{Components/ParentComponents/PaginationParent :: PaginationParent(~{Components/CategoryExtraParams::params},@{/category/{categoryName}(categoryName=${atr_category.getUrl()})})}"></th:block>
+                    <th:block th:replace="~{Components/ParentComponents/PaginationParent :: PaginationParent(
+                        ~{Components/CategoryExtraParams::params},
+                        @{/category/{categoryName}(categoryName=${atr_category.getUrl()})},
+                        ${atr_threads})}"></th:block>
                 </th:block>
 
             </div>

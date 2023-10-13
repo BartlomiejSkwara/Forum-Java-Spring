@@ -7,13 +7,16 @@
 <body>
 
 
-  <th:block th:fragment="PaginationParent(extraParams,formUrl)" >
+  <th:block th:fragment="PaginationParent(extraParams,formUrl,pageResponse)" >
     <form id="pagination-form" class = "mx-auto mb-0 bg-dark " th:action="${formUrl}"
           onsubmit="ajaxPostFormPagination('pagination-form','contentList'); return false">
-      <th:block th:replace="${extraParams}"></th:block>
+      <th:block th:if="${extraParams != null}">
+        <th:block  th:replace="${extraParams}"></th:block>
+      </th:block>
+
       <nav class="mx-auto mt-3 mb-0   align-self-end  " aria-label="Page navigation example">
         <ul class="pagination mb-0">
-          <th:block th:if="${atr_threads.getCurrentPage()!=0}">
+          <th:block th:if="${pageResponse.getCurrentPage()!=0}">
             <li class="page-item">
 
               <button class="page-link" type="submit"  name="page" value="0" aria-label="Pierwsza strona">
@@ -23,27 +26,27 @@
 
             </li>
             <li class="page-item">
-              <button class="page-link" type="submit" name="page" th:value="${atr_threads.getCurrentPage()}-${1}" aria-label="Poprzednia strona">
-                [[${atr_threads.getCurrentPage()}-${1}]]
+              <button class="page-link" type="submit" name="page" th:value="${pageResponse.getCurrentPage()}-${1}" aria-label="Poprzednia strona">
+                [[${pageResponse.getCurrentPage()}-${1}]]
               </button>
             </li>
           </th:block>
 
           <li class="page-item">
-            <button class="page-link active" type="submit" th:value="${atr_threads.getCurrentPage()}">
-              [[${atr_threads.getCurrentPage()}]]
+            <button class="page-link active" type="submit" th:value="${pageResponse.getCurrentPage()}">
+              [[${pageResponse.getCurrentPage()}]]
             </button>
           </li>
 
-          <th:block th:if="${atr_threads.getLastPage()>atr_threads.getCurrentPage()}">
+          <th:block th:if="${pageResponse.getLastPage()>pageResponse.getCurrentPage()}">
             <li class="page-item">
-              <button class="page-link" type="submit" name="page" th:value="${atr_threads.getCurrentPage()}+${1}" aria-label="Kolejna strona" >
-                [[${atr_threads.getCurrentPage()}+${1}]]
+              <button class="page-link" type="submit" name="page" th:value="${pageResponse.getCurrentPage()}+${1}" aria-label="Kolejna strona" >
+                [[${pageResponse.getCurrentPage()}+${1}]]
               </button>
             </li>
 
             <li class="page-item">
-              <button class="page-link" type="submit"  name="page" th:value="${atr_threads.getLastPage()}" aria-label="Ostatatnia strona">
+              <button class="page-link" type="submit"  name="page" th:value="${pageResponse.getLastPage()}" aria-label="Ostatatnia strona">
                 <span aria-hidden="true">&raquo;</span>
               </button>
             </li>

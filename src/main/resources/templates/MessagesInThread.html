@@ -27,13 +27,16 @@
                       <textarea class="form-control no-scroll " name="message" id="message" rows="3" maxlength="180" placeholder="Enter your message" ></textarea>
                       <div id="messageHelp" class="form-text">Maksymalnie 180 znaków</div>
                     </div>
-                    <button type="submit" class="btn btn-primary" >Wyślij</button>
+                    <button type="submit" class="btn btn-primary" name="page" th:value="${atr_messages.getLastPage()}" >Wyślij</button>
                 </form>
 
 
 
                 <div class=" mx-auto">
-        <!--  TODO         {include file="components/paginationThread.tpl"}-->
+                    <th:block th:replace="~{Components/ParentComponents/PaginationParent :: PaginationParent(
+                        null,
+                        @{/thread/categoryName/{threadId}(threadId=${atr_threadID})},
+                        ${atr_messages})}"></th:block>
                 </div>
             </th:block>
       </div>

@@ -6,7 +6,7 @@
 </head>
   <body>
     <div th:if="${threads!=null}" th:fragment="threadList(threads)" class="container ">
-        <div th:each="thread:${threads.getThreadDTOList()}" class="py-3 row border-bottom  ">
+        <div th:each="thread:${threads.getDTOList()}" class="py-3 row border-bottom  ">
           <div class="col-12 col-lg-6">
             <a th:href="@{${'/thread/'}+${atr_category.getUrl()}+${'/'}+${thread.getIdThread()}}" class="link-success mb-1  link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><strong th:text="${thread.getTopic()}"></strong></a>
             <p class="">

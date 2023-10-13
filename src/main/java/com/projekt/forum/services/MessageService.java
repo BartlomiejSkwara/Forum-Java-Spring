@@ -1,7 +1,9 @@
 package com.projekt.forum.services;
 
 import com.projekt.forum.dataTypes.AlertManager;
+import com.projekt.forum.dataTypes.dto.MessageDTO;
 import com.projekt.forum.dataTypes.forms.MessagePostForm;
+import com.projekt.forum.dataTypes.pageResponse.PageResponse;
 import com.projekt.forum.dataTypes.projection.UserProjection;
 import com.projekt.forum.entity.MessageEntity;
 import com.projekt.forum.entity.ThreadEntity;
@@ -12,6 +14,10 @@ import com.projekt.forum.repositories.UserRepository;
 import com.projekt.forum.utility.DateUtility;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +29,8 @@ public class MessageService {
     private final ThreadRepository threadRepository;
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final String sortProperty = "creationDate";
+    private final Integer pageSize = 20;
     @PersistenceContext
     private EntityManager entityManager;
     public MessageService(AlertManager alertManager, ThreadRepository threadRepository, MessageRepository messageRepository, UserRepository userRepository) {
@@ -30,6 +38,17 @@ public class MessageService {
         this.threadRepository = threadRepository;
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
+    }
+
+    public PageResponse<MessageDTO> getMessagesByTopic(Integer threadId, Integer pageNumber){
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.Direction.DESC,sortProperty);
+        Page<MessageDTO> messageDTOPage = messageRepository.findByThreadEntity_IdThread_Pageable(threadId,pageable);
+
+        PageResponse<MessageDTO> threadDTOPageResponse = new PageResponse<>();
+        threadDTOPageResponse.setDTOList(messageDTOPage);
+        threadDTOPageResponse.setValues(pageNumber,pageSize, messageDTOPage.getTotalElements());
+
+        return threadDTOPageResponse;
     }
 
     //TODO potencjalna poprawka by tu sie przydała :< w celu usprawnienia wydajności ( tj. ilości zapytań do BD)

@@ -1,9 +1,8 @@
 package com.projekt.forum.dataTypes.pageResponse;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class PageResponse<T>  {
@@ -16,12 +15,14 @@ public class PageResponse<T>  {
     private String sortBy;
     private String filter;
 
-    public List<T> getThreadDTOList() {
+    public List<T> getDTOList() {
         return DTOList;
     }
-
-    public void setThreadDTOList(List<T> threadDTOList) {
-        this.DTOList = threadDTOList;
+    public void setDTOList(List<T> DTOList) {
+        this.DTOList = DTOList;
+    }
+    public void setDTOList(Page<T> DTOPage) {
+        this.DTOList = DTOPage.getContent();
     }
 
     public Integer getCurrentPage() {

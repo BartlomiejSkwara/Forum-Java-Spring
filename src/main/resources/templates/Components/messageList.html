@@ -7,7 +7,7 @@
   <body>
     <div th:if="${messages!=null}" th:fragment="messageList(messages)" class="container mt-4 bg-body-tertiary py-3">
 
-        <div th:each="message:${messages}" class="row mb-4">
+        <div th:each="message:${messages.getDTOList()}" class="row mb-4">
             <div  th:class="${message.getAuthorName().equals(#authentication.getName())}?'col-10  offset-2':'col-10' ">
               <div th:class="(${message.getAuthorName().equals(#authentication.getName())}?'border-activeUser border-end-0':'border-start-0') + ' px-0 py-0 row shadow-lg rounded-end p-3 d-flex text-break border'">
               <div id="top" th:class="(${message.getAuthorName().equals(#authentication.getName())}?'bg-activeUser':'bg-light-subtles')+' col-12 col-lg-2 text-center d-lg-block d-flex align-items-center'">
