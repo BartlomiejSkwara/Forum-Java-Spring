@@ -41,7 +41,7 @@ public class MessageService {
     }
 
     public PageResponse<MessageDTO> getMessagesByTopic(Integer threadId, Integer pageNumber){
-        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.Direction.DESC,sortProperty);
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.Direction.ASC,sortProperty);
         Page<MessageDTO> messageDTOPage = messageRepository.findByThreadEntity_IdThread_Pageable(threadId,pageable);
 
         PageResponse<MessageDTO> threadDTOPageResponse = new PageResponse<>();

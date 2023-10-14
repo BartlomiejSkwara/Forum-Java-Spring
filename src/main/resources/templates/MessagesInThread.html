@@ -19,7 +19,7 @@
                 <th:block th:replace="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}"></th:block>
 
                 <form sec:authorize="isAuthenticated()" id = "messagePostFormA" class = "mx-auto text-center  w-90 border p-2 mt-2 mb-0"
-                      th:action="'/postMessage/'+${atr_threadID}"
+                      th:action="'/postMessage/'+${atr_categoryUrl}+'/'+${atr_threadID}"
                       onsubmit="ajaxPostFormPagination('messagePostFormA','contentList'); return false;">
                     <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}"></input>
                     <div class="mx-auto w-75">
@@ -35,7 +35,7 @@
                 <div class=" mx-auto">
                     <th:block th:replace="~{Components/ParentComponents/PaginationParent :: PaginationParent(
                         null,
-                        @{/thread/categoryName/{threadId}(threadId=${atr_threadID})},
+                        @{/thread/{categoryName}/{threadId}(threadId=${atr_threadID}, categoryName=${atr_categoryUrl})},
                         ${atr_messages})}"></th:block>
                 </div>
             </th:block>

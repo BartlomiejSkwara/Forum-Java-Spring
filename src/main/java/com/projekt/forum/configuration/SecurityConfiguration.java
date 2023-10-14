@@ -75,7 +75,7 @@ public class SecurityConfiguration {
 
             http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer
                     .ignoringRequestMatchers("/category/{categoryUrl}")
-
+                    .ignoringRequestMatchers("/thread/{categoryUrl}/{threadId}")
             );
 
 //            http.httpBasic(httpSecurityHttpBasicConfigurer -> {httpSecurityHttpBasicConfigurer.})

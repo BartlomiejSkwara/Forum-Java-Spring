@@ -40,39 +40,83 @@ public class MessagesController {
     }
 
     @GetMapping("/thread/{categoryUrl}/{threadId}")
-    String viewMessages(@PathVariable() Integer threadId, Model model,
-                        @PathVariable String categoryUrl,
-                        @RequestParam(value = "page",defaultValue = "0") Integer page){
+    String displayMessages(
+                        @PathVariable() Integer threadId,
+                        Model model,
+                        @PathVariable String categoryUrl
+                        ){
         if (threadId==null){
-            model.addAttribute("atr_title", "Error");
-            alertManager.addAlert(new Alert("Wybrano wątek w niepoprawny sposób", Alert.AlertType.WARNING));
+            alertManager.addAlert(new Alert("Wybrano wątek w niepoprawny sposób", Alert.AlertType.DANGER));
+            return "redirect:/error";
+
         }
         else {
             Optional<ThreadProjection> thread = threadRepository.findProjectionByIdThread(threadId);
             if (thread.isEmpty()) {
-                model.addAttribute("atr_title", "Error");
                 alertManager.addAlert(new Alert("Wybrany wątek nie istnieje :<", Alert.AlertType.DANGER));
+                return "redirect:/error";
             }
             else
             {
                 model.addAttribute("atr_title", thread.get().getTopic());
 
                 model.addAttribute("atr_threadID", threadId);
+                model.addAttribute("atr_categoryUrl", categoryUrl);
 
-                model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,page));
-
+                model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,0));
+                //model.addAttribute("atr_alertManager", alertManager);
+                return "MessagesInThread";
             }
 
         }
-        model.addAttribute("atr_alertManager", alertManager);
-        return "MessagesInThread";
+
     }
 
-    @PostMapping(path = "/postMessage/{threadId}")
+
+    @PostMapping("/thread/{categoryUrl}/{threadId}")
+    String displayPage(@PathVariable() Integer threadId, Model model,
+                           @PathVariable() String categoryUrl,
+                        @RequestParam(value = "page",defaultValue = "0") Integer page
+                           ){
+        if (threadId==null){
+            alertManager.addAlert(new Alert("Wybrano wątek w niepoprawny sposób", Alert.AlertType.DANGER));
+            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
+
+            return "Blank";
+
+        }
+        else {
+            Optional<ThreadProjection> thread = threadRepository.findProjectionByIdThread(threadId);
+            if (thread.isEmpty()) {
+                alertManager.addAlert(new Alert("Wybrany wątek nie istnieje :<", Alert.AlertType.DANGER));
+                RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
+
+                return "Blank";
+            }
+            else
+            {
+                model.addAttribute("atr_title", thread.get().getTopic());
+
+                model.addAttribute("atr_threadID", threadId);
+                model.addAttribute("atr_categoryUrl", categoryUrl);
+
+                model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,page));
+                model.addAttribute("atr_alertManager", alertManager);
+                RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
+
+                return "MessagesInThread :: threadContent";
+            }
+
+        }
+
+    }
+
+    @PostMapping(path = "/postMessage/{categoryUrl}/{threadId}")
     public String postMessage(@PathVariable( required = false, name = "threadId") Integer threadId,Model model,
                               @Valid() @ModelAttribute() MessagePostForm messagePostForm,
                               BindingResult bindingResult,
                               @AuthenticationPrincipal UserDetails userDetails,
+                              @PathVariable() String categoryUrl,
                               @RequestParam(value = "page",defaultValue = "0") Integer lastPage
     ){
             if(threadId==null){
@@ -87,6 +131,7 @@ public class MessagesController {
             if(messageService.saveMessage(threadId,messagePostForm,userDetails.getUsername())) {
                 model.addAttribute("atr_threadID", threadId);
                 model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,lastPage));
+                model.addAttribute("atr_categoryUrl", categoryUrl);
 
                 //model.addAttribute("atr_messages", messageRepository.findByThreadEntity_IdThread(threadId));
                 model.addAttribute("atr_alertManager", alertManager);
@@ -104,6 +149,8 @@ public class MessagesController {
         model.addAttribute("atr_alertManager", alertManager);
 
         model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,lastPage));
+        model.addAttribute("atr_categoryUrl", categoryUrl);
+
         //model.addAttribute("atr_messages", messageRepository.findByThreadEntity_IdThread(threadId));
         model.addAttribute("atr_threadID", threadId);
         RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
