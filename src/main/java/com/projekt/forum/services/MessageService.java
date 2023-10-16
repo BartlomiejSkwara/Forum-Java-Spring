@@ -30,7 +30,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
     private final String sortProperty = "creationDate";
-    private final Integer pageSize = 20;
+    public final Integer pageSize = 20;
     @PersistenceContext
     private EntityManager entityManager;
     public MessageService(AlertManager alertManager, ThreadRepository threadRepository, MessageRepository messageRepository, UserRepository userRepository) {
@@ -53,11 +53,8 @@ public class MessageService {
 
     //TODO potencjalna poprawka by tu sie przydała :< w celu usprawnienia wydajności ( tj. ilości zapytań do BD)
     @Transactional
-    public boolean saveMessage(Integer threadId, MessagePostForm messagePostForm, String username){
-        Optional<ThreadEntity> currentThread  = threadRepository.findEntityByIdThread(threadId);
-        if (currentThread.isEmpty()){
-            return false;
-        }
+    public boolean saveMessage(Integer threadId, MessagePostForm messagePostForm, String username, ThreadEntity currentThread){
+
 
         ///TODO tutaj w przyszłości po zmianach w security może byc potrzebna korekta
         Optional<UserProjection> userProjection = userRepository.findByUsername(username);
@@ -66,12 +63,16 @@ public class MessageService {
         }
         UserEntity userEntity = entityManager.getReference(UserEntity.class, userProjection.get().getIduser());
 
-        MessageEntity messageEntity = new MessageEntity(null, DateUtility.getCurrentDate(),messagePostForm.getContent(),userEntity,currentThread.get());
+        MessageEntity messageEntity = new MessageEntity(null, DateUtility.getCurrentDate(),messagePostForm.getContent(),userEntity,currentThread);
         messageRepository.save(messageEntity);
-        currentThread.get().setMessageCount(currentThread.get().getMessageCount()+1);
-        threadRepository.save(currentThread.get());
+        currentThread.setMessageCount(currentThread.getMessageCount()+1);
+
+        threadRepository.save(currentThread);
 
 
         return true;
     }
+
+
+
 }

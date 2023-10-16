@@ -19,22 +19,23 @@
 
             <div class = "d-flex flex-row-reverse">
 
-                <button class="btn btn-primary border-primary-subtle  rounded-pill " type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                    <img class=" mx-auto "  src="" th:src="@{~/images/icons/filter.svg}" alt="" width="16" height="16"></img>
+                <span class="btn btn-primary border-primary-subtle  rounded-circle p-2 ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                    <img class=" mx-auto "  src="" th:src="@{~/images/icons/filter.svg}" alt="" width="24" height="24"></img>
                     <span class="visually-hidden">Filtrowanie</span>
-                </button>
+                </span>
+
+
 
                 <th:block sec:authorize="isAuthenticated()">
-                    <a class="btn btn-primary border-primary-subtle  rounded-pill" type="button" th:href="@{/addThreadView}">
-                        <img class=" mx-auto " src="" th:src="@{~/images/icons/plus.svg}"  alt="" width="16" height="16"></img>
+                    <a class="btn btn-primary border-primary-subtle  rounded-circle p-2 ms-2" type="button" th:href="@{/addThreadView}">
+                        <img class=" mx-auto " src="" th:src="@{~/images/icons/plus.svg}"  alt="" width="24" height="24"></img>
                         <span class="visually-hidden">Dodaj kategorię</span>
                     </a>
-                    <a class="btn btn-primary border-primary-subtle  rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false">
-                        <span class="btn btn-primary border-primary-subtle  rounded-pill">
-                            <img class=" mx-auto "  src="" th:src="@{~images/icons/plus.svg}" alt="" width="16" height="16" style="fill: red;"></img>
-                            <span class="visually-hidden">Dodaj kategorię</span>
-                        </span>
+                    <a class="btn btn-primary border-primary-subtle  rounded-circle p-2 ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false">
+                        <img class=" mx-auto "  src="" th:src="@{~images/icons/plus.svg}" alt="" width="24" height="24" style="fill: red;"></img>
+                        <span class="visually-hidden">Dodaj kategorię</span>
                     </a>
+
                 </th:block>
 
             </div>

@@ -66,9 +66,9 @@
                     <!--                Removing and adding categories !!! admin only !!!-->
                     <th:block sec:authorize=" hasRole('ROLE_admin')">
                         <a th:href="@{'editCategory/'+${cat.getUrl()}+'?id='+${cat.getCategoryID()}}">
-                        <span class="position-absolute top-0 start-80 translate-middle p-2 bg-primary rounded-circle border-primary-subtle btn">
-                                <img class=" mx-auto"  src="" th:src="@{~/images/icons/wrench.svg}" alt="" width="24" height="24" style="fill: red;">
-                                <span class="visually-hidden">Edit Category</span>
+                            <span class="position-absolute top-0 start-80 translate-middle p-2 bg-primary rounded-circle border-primary-subtle btn">
+                                    <img class=" mx-auto"  src="" th:src="@{~/images/icons/wrench.svg}" alt="" width="24" height="24" style="fill: red;">
+                                    <span class="visually-hidden">Edit Category</span>
                             </span>
                         </a>
 

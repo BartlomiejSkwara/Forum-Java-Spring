@@ -4,6 +4,7 @@ import com.projekt.forum.dataTypes.Alert;
 import com.projekt.forum.dataTypes.AlertManager;
 import com.projekt.forum.dataTypes.forms.MessagePostForm;
 import com.projekt.forum.dataTypes.projection.ThreadProjection;
+import com.projekt.forum.entity.ThreadEntity;
 import com.projekt.forum.repositories.MessageRepository;
 import com.projekt.forum.repositories.ThreadRepository;
 import com.projekt.forum.services.MessageService;
@@ -119,7 +120,8 @@ public class MessagesController {
                               @PathVariable() String categoryUrl,
                               @RequestParam(value = "page",defaultValue = "0") Integer lastPage
     ){
-            if(threadId==null){
+        Optional<ThreadEntity> currentThread  =  threadRepository.findEntityByIdThread(threadId);
+        if(threadId==null || currentThread.isEmpty()){
             //Może zniknąć i nie pokazać się na Error
             alertManager.addAlert(new Alert("Próbowałeś dodać wiadomość do niestniejącego wątku", Alert.AlertType.DANGER));
             RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
@@ -128,8 +130,11 @@ public class MessagesController {
         }
 
         if (validationUtility.ConvertValidationErrors(bindingResult,alertManager)){
-            if(messageService.saveMessage(threadId,messagePostForm,userDetails.getUsername())) {
+            if(messageService.saveMessage(threadId,messagePostForm,userDetails.getUsername(), currentThread.get())) {
                 model.addAttribute("atr_threadID", threadId);
+                if((currentThread.get().getMessageCount())%messageService.pageSize==1){
+                    lastPage++;
+                }
                 model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,lastPage));
                 model.addAttribute("atr_categoryUrl", categoryUrl);
 
