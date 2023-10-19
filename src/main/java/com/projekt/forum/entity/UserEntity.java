@@ -48,9 +48,11 @@ public class UserEntity implements UserDetails {
     //@SequenceGenerator(name = "userIDGen", sequenceName = "userIDGen", initialValue = 34 )
     private Integer iduser;
 
-    @OneToOne()
-    @PrimaryKeyJoinColumn(name = "role_id")
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "roleID", nullable = false)
     private GrantedAuthorityEntity authority;
+
+
 
     @Column(name = "password")
     private String password;

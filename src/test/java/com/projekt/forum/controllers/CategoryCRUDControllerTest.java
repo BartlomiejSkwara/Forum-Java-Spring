@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Optional;
@@ -37,6 +38,7 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(controllers = CategoryCRUDController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
+@RequestMapping
 class CategoryCRUDControllerTest {
 
     @MockBean()
@@ -68,6 +70,7 @@ class CategoryCRUDControllerTest {
                 .andExpect(MockMvcResultMatchers.xpath("//textarea[@name='"+descParamName+"']").exists())
                 .andExpect(MockMvcResultMatchers.view().name("CategoryCreation"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+
     }
     @Test
     void addCategory_post_SUCCESS() throws Exception {

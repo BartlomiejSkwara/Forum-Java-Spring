@@ -21,6 +21,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Configuration
 @EnableWebSecurity
@@ -95,7 +97,6 @@ public class SecurityConfiguration {
         provider.setHideUserNotFoundExceptions(false);
 
         InMemoryUserDetailsManager  userDetailsService = new InMemoryUserDetailsManager();
-
         for (UserEntity user:this.userRepository.joinUsersWithRole()){
             userDetailsService.createUser(user);
         }

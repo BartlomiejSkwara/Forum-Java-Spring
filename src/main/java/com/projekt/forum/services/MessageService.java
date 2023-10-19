@@ -14,6 +14,8 @@ import com.projekt.forum.repositories.UserRepository;
 import com.projekt.forum.utility.DateUtility;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,7 @@ public class MessageService {
     public final Integer pageSize = 20;
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
     public MessageService(AlertManager alertManager, ThreadRepository threadRepository, MessageRepository messageRepository, UserRepository userRepository) {
         this.alertManager = alertManager;
         this.threadRepository = threadRepository;
