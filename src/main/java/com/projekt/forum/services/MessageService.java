@@ -60,7 +60,7 @@ public class MessageService {
 
 
         ///TODO tutaj w przyszłości po zmianach w security może byc potrzebna korekta
-        Optional<UserProjection> userProjection = userRepository.findByUsername(username);
+        Optional<UserProjection> userProjection = userRepository.findUserProjectionByUsername(username);
         if(userProjection.isEmpty()){
             return false;
         }

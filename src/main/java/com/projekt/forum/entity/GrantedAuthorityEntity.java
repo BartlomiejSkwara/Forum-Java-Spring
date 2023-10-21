@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.util.Objects;
 

@@ -16,13 +16,13 @@ import java.util.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection =  EmbeddedDatabaseConnection.H2)
-public class UserRepositoryTest {
+public class CustomUserDetailsRepositoryTest {
 
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
 
     @Autowired
-    public UserRepositoryTest(UserRepository userRepository, AuthorityRepository authorityRepository){
+    public CustomUserDetailsRepositoryTest(UserRepository userRepository, AuthorityRepository authorityRepository){
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
     }
@@ -40,14 +40,14 @@ public class UserRepositoryTest {
         authorityRepository.save(userRole);
         authorityRepository.save(adminRole);
 
-        UserEntity entity = userRepository.save(new UserEntity(userRole,"123","Krisent", date ,true,true,true,true));
+        UserEntity entity = userRepository.save(new UserEntity(userRole,"123","Krisent", date));
 
 
         Assertions.assertNotNull(entity);
         Assertions.assertEquals(date,entity.getCreationDate());
-        Collection<GrantedAuthorityEntity> entities = entity.getAuthorities();
+        GrantedAuthorityEntity entities = entity.getAuthority();
         Assertions.assertNotNull(entity);
-        Assertions.assertTrue(entities.contains(userRole));
+        Assertions.assertEquals(entities, userRole);
     }
 
     @Test
@@ -56,8 +56,8 @@ public class UserRepositoryTest {
         Date date = DateUtility.getCurrentDate();
         authorityRepository.save(userRole);
         authorityRepository.save(adminRole);
-        userRepository.save(new UserEntity(userRole,"123","Krisent", date ,true,true,true,true));
-        userRepository.save(new UserEntity(adminRole,"23","admin", date ,true,true,true,true));
+        userRepository.save(new UserEntity(userRole,"123","Krisent", date ));
+        userRepository.save(new UserEntity(adminRole,"23","admin", date ));
 
         Collection<UserEntity> users = userRepository.joinUsersWithRole();
 
@@ -68,11 +68,11 @@ public class UserRepositoryTest {
             Assertions.assertNotNull(user.getUsername());
             Assertions.assertTrue(user.getUsername().equals("Krisent")||user.getUsername().equals("admin"));
             Assumptions.assumingThat(user.getUsername().equals("Krisent"),()->{
-                Assertions.assertEquals(userRole,user.getAuthorities().toArray()[0]);
+                Assertions.assertEquals(userRole,user.getAuthority());
             });
 
             Assumptions.assumingThat(user.getUsername().equals("admin"),()->{
-                Assertions.assertEquals(adminRole,user.getAuthorities().toArray()[0]);
+                Assertions.assertEquals(adminRole,user.getAuthority());
             });
         }
     }

@@ -16,5 +16,6 @@ public interface UserRepository extends ListCrudRepository<UserEntity,Integer> {
     @Query("SELECT u FROM UserEntity u  LEFT JOIN FETCH u.authority")
     List<UserEntity> joinUsersWithRole();
 
-    Optional<UserProjection> findByUsername(String username);
+    Optional<UserProjection> findUserProjectionByUsername(String username);
+    Optional<UserEntity> findUserEntityByUsername(String username);
 }

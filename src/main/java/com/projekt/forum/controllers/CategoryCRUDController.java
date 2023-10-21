@@ -42,8 +42,6 @@ public class CategoryCRUDController {
 
 
 
-
-
     @GetMapping("/deleteCategory")
     public String deleteCategory( @RequestParam(name = "id", required = false) Integer categoryId) throws IOException {
 
@@ -77,6 +75,7 @@ public class CategoryCRUDController {
         }
         return "redirect:/";
     }
+
 
     @PostMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryURL}"})
     public String editCategoryPost(@Valid @ModelAttribute() CategoryCUForm categoryCUForm,BindingResult bindingResult,
