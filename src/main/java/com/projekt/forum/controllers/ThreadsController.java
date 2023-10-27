@@ -3,10 +3,9 @@ package com.projekt.forum.controllers;
 import com.projekt.forum.dataTypes.Alert;
 import com.projekt.forum.dataTypes.AlertManager;
 import com.projekt.forum.dataTypes.forms.CategoryFilterForm;
+import com.projekt.forum.dataTypes.forms.ThreadCUForm;
 import com.projekt.forum.entity.CategoryEntity;
-import com.projekt.forum.entity.UserEntity;
 import com.projekt.forum.repositories.CategoryRepository;
-import com.projekt.forum.repositories.ThreadRepository;
 import com.projekt.forum.services.ThreadsService;
 import com.projekt.forum.utility.RequestUtility;
 import com.projekt.forum.utility.ValidationUtility;
@@ -31,14 +30,15 @@ public class ThreadsController {
     private final ThreadsService threadsService;
     private final HttpServletResponse httpServletResponse;
     private final Integer defaultStartingPage = 0;
-
+    private final ValidationUtility validationUtility;
     @Autowired
-    public ThreadsController( AlertManager alertManager, CategoryRepository categoryRepository, ThreadsService threadsService, HttpServletResponse httpServletResponse){
+    public ThreadsController(AlertManager alertManager, CategoryRepository categoryRepository, ThreadsService threadsService, HttpServletResponse httpServletResponse, ValidationUtility validationUtility){
 
         this.alertManager = alertManager;
         this.categoryRepository = categoryRepository;
         this.threadsService = threadsService;
         this.httpServletResponse = httpServletResponse;
+        this.validationUtility = validationUtility;
     }
 
     @GetMapping(path = {"/category","/category/","/category/{categoryUrl}"})
@@ -106,5 +106,34 @@ public class ThreadsController {
         return "redirect:/";
     }
 
+
+    @GetMapping("/addThread")
+    public String addThreadView(Model model){
+
+        model.addAttribute("atr_title", "Dodawanie Wątku");
+        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        return "ThreadCreation";
+    }
+
+    @PostMapping("/addThread")
+    public String addThread(
+            @Valid @ModelAttribute ThreadCUForm threadCUForm, BindingResult bindingResult,
+            HttpServletResponse httpServletResponse,
+            Model model
+            )
+    {
+
+        if (validationUtility.ConvertValidationErrors(bindingResult, alertManager)) {
+            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/kategoria/nr");
+            return "Blank";
+        }
+
+        model.addAttribute("alerts",alertManager);
+        model.addAttribute("clear",true);
+
+        RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
+        return "Components/alerts :: alertsList";
+
+    }
 
 }

@@ -32,7 +32,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
     private final String sortProperty = "creationDate";
-    public final Integer pageSize = 20;
+    private final Integer pageSize = 20;
     @PersistenceContext
     private EntityManager entityManager;
     @Autowired
@@ -53,6 +53,9 @@ public class MessageService {
 
         return threadDTOPageResponse;
     }
+    public int getPageSize(){
+        return pageSize;
+    }
 
     //TODO potencjalna poprawka by tu sie przydała :< w celu usprawnienia wydajności ( tj. ilości zapytań do BD)
     @Transactional
@@ -69,7 +72,7 @@ public class MessageService {
         MessageEntity messageEntity = new MessageEntity(null, DateUtility.getCurrentDate(),messagePostForm.getContent(),userEntity,currentThread);
         messageRepository.save(messageEntity);
         currentThread.setMessageCount(currentThread.getMessageCount()+1);
-
+        currentThread.setUpdateDate(DateUtility.getCurrentDate());
         threadRepository.save(currentThread);
 
 

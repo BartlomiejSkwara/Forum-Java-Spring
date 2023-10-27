@@ -29,7 +29,7 @@
                 </th:block>
 
                 <th:block th:unless="${atr_alertManager==null}">
-                    <th:block th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}">
+                    <th:block th:insert="~{Components/alerts :: alertsDisplayer(${atr_alertManager},true)}">
                     </th:block>
                 </th:block>
 

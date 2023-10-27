@@ -12,6 +12,7 @@ import com.projekt.forum.utility.RequestUtility;
 import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +32,7 @@ public class MessagesController {
     private final ValidationUtility validationUtility;
     private final HttpServletResponse httpServletResponse;
 
+    @Autowired
     public MessagesController(AlertManager alertManager, MessageRepository messageRepository, ThreadRepository threadRepository, MessageService messageService, ValidationUtility validationUtility, HttpServletResponse httpServletResponse) {
         this.alertManager = alertManager;
         this.messageRepository = messageRepository;
@@ -132,7 +134,7 @@ public class MessagesController {
         if (validationUtility.ConvertValidationErrors(bindingResult,alertManager)){
             if(messageService.saveMessage(threadId,messagePostForm,userDetails.getUsername(), currentThread.get())) {
                 model.addAttribute("atr_threadID", threadId);
-                if((currentThread.get().getMessageCount())%messageService.pageSize==1){
+                if((currentThread.get().getMessageCount())%messageService.getPageSize()==1){
                     lastPage++;
                 }
                 model.addAttribute("atr_messages", messageService.getMessagesByTopic(threadId,lastPage));

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+      <div id="alertsComponent"  class= "text-center  mx-auto dark " th:fragment="alertsDisplayer(alerts,clear)">
+
+          <th:block th:fragment="alertsList(alerts,clear)" th:if="${alerts!=null}"  >
+            <th:block th:if="${clear==true}">
+                <div th:each="alert: ${alerts.getAlertsAndClear()}" th:class="'alert alert-'+${alert.getTypeName()}" th:text="${alert.getText()}">
+                </div>
+            </th:block>
+            <th:block th:if="${clear==false}">
+                <div th:each="alert: ${alerts.getAlerts()}" th:class="'alert alert-'+${alert.getTypeName()}" th:text="${alert.getText()}">
+                </div>
+            </th:block>
+          </th:block>
+      </div>
+</body>
+</html>

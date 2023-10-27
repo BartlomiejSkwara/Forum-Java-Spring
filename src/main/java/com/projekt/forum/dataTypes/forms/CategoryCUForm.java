@@ -2,13 +2,10 @@ package com.projekt.forum.dataTypes.forms;
 
 import com.projekt.forum.utility.ValidationUtility;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.CreditCardNumber;
 
 public class CategoryCUForm {
-
     @NotNull(message = "Nie przekazano żadnej nazwy kategorii")
     //@NotBlank(message = "Pusta nazwa kategorii")
     @Size(  min = 1,

@@ -16,7 +16,7 @@
       <div id="contentList"  class=" list-group   list-group-flush  border-top border-white mt-2 col-lg-9 col-12 mx-auto  pb-0">
             <th:block th:fragment="threadContent">
                 <th:block th:replace="~{Components/messageList :: messageList(${atr_messages}) }"></th:block>
-                <th:block th:replace="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}"></th:block>
+                <th:block th:replace="~{Components/alerts :: alertsDisplayer(${atr_alertManager},true)}"></th:block>
 
                 <form sec:authorize="isAuthenticated()" id = "messagePostFormA" class = "mx-auto text-center  w-90 border p-2 mt-2 mb-0"
                       th:action="'/postMessage/'+${atr_categoryUrl}+'/'+${atr_threadID}"

@@ -12,7 +12,7 @@
 
         <div class= "text-center mx-auto mt-auto dark">
           <form id= "CUform"
-                onsubmit="ajaxPostFormWithPathParam('CUform','/editCategory','content'); return false;"
+                onsubmit="ajaxPostFormWithPathParam('CUform','/editCategory','alertsComponent'); return false;"
                 th:attr="pathParam=${atr_editedCategoryURL}">
 
             <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}"></input>
@@ -46,7 +46,7 @@
           </form>
 
         </div>
-        <th:block th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}">
+        <th:block th:insert="~{Components/alerts :: alertsDisplayer(${atr_alertManager},true)}">
 
         </th:block>
 

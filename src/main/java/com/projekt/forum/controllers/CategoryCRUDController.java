@@ -80,8 +80,6 @@ public class CategoryCRUDController {
     @PostMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryURL}"})
     public String editCategoryPost(@Valid @ModelAttribute() CategoryCUForm categoryCUForm,BindingResult bindingResult,
                                    Model model ){
-
-
         //httpServletResponse.addHeader(RequestUtility.AjaxInsertParam, RequestUtility.OperationReplace);
 
         if (categoryCUForm==null||categoryCUForm.getCategoryID()==null){
@@ -103,12 +101,15 @@ public class CategoryCRUDController {
             }
 
             RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
-            model.addAttribute("atr_editedCategoryURL", "?id="+categoryCUForm.getCategoryID());
-            model.addAttribute("atr_alertManager",alertManager);
-            model.addAttribute("atr_title", "Edycja Kategorii: " + categoryCUForm.getCategoryName());
-            model.addAttribute("atr_previousForm", categoryCUForm);
+            //model.addAttribute("atr_editedCategoryURL", "?id="+categoryCUForm.getCategoryID());
+            //model.addAttribute("atr_alertManager",alertManager);
+            //model.addAttribute("atr_title", "Edycja Kategorii: " + categoryCUForm.getCategoryName());
+            //model.addAttribute("atr_previousForm", categoryCUForm);
             httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return "CategoryEditing :: content";
+
+            model.addAttribute("alerts",alertManager);
+            model.addAttribute("clear",true);
+            return "Components/alerts :: alertsList";
 
         }
     }
@@ -127,26 +128,33 @@ public class CategoryCRUDController {
                                    Model model) throws IOException {
         model.addAttribute("atr_title", "Dodawanie Kategorii");
         if(validationUtility.ConvertValidationErrors(bindingResult,this.alertManager)){
-            if (!categoryService.addCategory(categoryCUForm)){
-                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                model.addAttribute("atr_previousForm",categoryCUForm);
-            }else {
-                httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
-
+            if (categoryService.addCategory(categoryCUForm)){
+                //httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
+                httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+                RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse);
+                return "Blank";
             }
-        }
-        else {
-            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            model.addAttribute("atr_previousForm",categoryCUForm);
 
         }
+
+//            model.addAttribute("atr_previousForm",categoryCUForm);
+
+
+
+        httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        //model.addAttribute("atr_previousForm",categoryCUForm);
 
         RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
 
-        model.addAttribute("atr_alertManager",alertManager);
-        return "CategoryCreation :: content";
+        //model.addAttribute("atr_alertManager",alertManager);
+        model.addAttribute("alerts",alertManager);
+        model.addAttribute("clear",true);
+        return "Components/alerts :: alertsList";
 
 
     }
+
+
+
 
 }

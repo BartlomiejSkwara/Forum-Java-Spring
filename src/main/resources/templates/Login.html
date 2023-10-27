@@ -20,7 +20,7 @@
                         <label for="passwordInput">Hasło</label>
                     </div>
 
-                    <div class="checkbox mb-3">
+                    <div class="checkbox mt-1 mb-3">
                         <label>
                             <input type="checkbox" value="remember-me"> Zapamiętaj mnie
                         </label>
@@ -31,7 +31,7 @@
 
             </div>
             <!--Messages-->
-            <th:block th:insert="~{Components/messages :: messagesDisplayer(${atr_alertManager},true)}">
+            <th:block th:insert="~{Components/alerts :: alertsDisplayer(${atr_alertManager},true)}">
             </th:block>
         </div>
     </body>
