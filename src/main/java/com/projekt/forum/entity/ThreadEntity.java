@@ -32,6 +32,7 @@ public class ThreadEntity {
 
     public ThreadEntity(){}
 
+
     public ThreadEntity(String topic, Date creationDate, Date updateDate, CategoryEntity categoryId, Integer messageCount, UserEntity userID) {
         this.topic = topic;
         this.creationDate = creationDate;
@@ -41,6 +42,9 @@ public class ThreadEntity {
         this.userID = userID;
     }
 
+    public ThreadEntity(String topic, Date date, CategoryEntity categoryId, UserEntity userID){
+        this(topic,date,date,categoryId,0,userID);
+    }
     public Integer getIdThread() {
         return idThread;
     }

@@ -27,7 +27,7 @@
 
 
                 <th:block sec:authorize="isAuthenticated()">
-                    <a class="btn btn-primary border-primary-subtle  rounded-circle p-2 ms-2" type="button" th:href="@{/addThread}">
+                    <a class="btn btn-primary border-primary-subtle  rounded-circle p-2 ms-2" type="button" th:href="@{'/addThread?category='+${atr_category.getUrl()}}">
                         <img class=" mx-auto " src="" th:src="@{~/images/icons/plus.svg}"  alt="" width="24" height="24"></img>
                         <span class="visually-hidden">Dodaj kategorię</span>
                     </a>

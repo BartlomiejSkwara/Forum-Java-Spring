@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -58,7 +59,7 @@ public class MessageService {
     }
 
     //TODO potencjalna poprawka by tu sie przydała :< w celu usprawnienia wydajności ( tj. ilości zapytań do BD)
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean saveMessage(Integer threadId, MessagePostForm messagePostForm, String username, ThreadEntity currentThread){
 
 
@@ -69,7 +70,18 @@ public class MessageService {
         }
         UserEntity userEntity = entityManager.getReference(UserEntity.class, userProjection.get().getIduser());
 
-        MessageEntity messageEntity = new MessageEntity(null, DateUtility.getCurrentDate(),messagePostForm.getContent(),userEntity,currentThread);
+
+        return saveMessage(threadId,messagePostForm.getContent(),userEntity,currentThread);
+    }
+
+
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean saveMessage(Integer threadId, String message, UserEntity userEntity, ThreadEntity currentThread){
+
+
+        MessageEntity messageEntity = new MessageEntity(null, DateUtility.getCurrentDate(),message,userEntity,currentThread);
         messageRepository.save(messageEntity);
         currentThread.setMessageCount(currentThread.getMessageCount()+1);
         currentThread.setUpdateDate(DateUtility.getCurrentDate());
@@ -78,7 +90,5 @@ public class MessageService {
 
         return true;
     }
-
-
 
 }

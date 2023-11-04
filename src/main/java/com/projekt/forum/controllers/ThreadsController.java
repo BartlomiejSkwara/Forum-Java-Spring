@@ -11,6 +11,7 @@ import com.projekt.forum.utility.RequestUtility;
 import com.projekt.forum.utility.ValidationUtility;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,7 +50,7 @@ public class ThreadsController {
             alertManager.addAlert(new Alert("Drogi użytkowniku kategoria której szukasz nie istnieje :<", Alert.AlertType.DANGER));
             return "redirect:/error";
         }
-        Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryUrl);
+        Optional<CategoryEntity> categoryEntity = categoryRepository.findCategoryEntityByUrl(categoryUrl);
         if(categoryEntity.isEmpty()){
             alertManager.addAlert(new Alert("Drogi użytkowniku kategoria której szukasz nie istnieje :<", Alert.AlertType.DANGER));
             return "redirect:/error";
@@ -76,7 +77,7 @@ public class ThreadsController {
 
             return "Blank";
         }
-        Optional<CategoryEntity> categoryEntity = categoryRepository.findByUrl(categoryUrl);
+        Optional<CategoryEntity> categoryEntity = categoryRepository.findCategoryEntityByUrl(categoryUrl);
         if(categoryEntity.isEmpty()){
             alertManager.addAlert(new Alert("Drogi użytkowniku kategoria której szukasz nie istnieje :<", Alert.AlertType.DANGER));
             RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
@@ -108,9 +109,18 @@ public class ThreadsController {
 
 
     @GetMapping("/addThread")
-    public String addThreadView(Model model){
+    public String addThreadView(
+            @RequestParam(name = "category") String categoryURL,
+            Model model){
+
+        if (categoryURL==null || categoryURL.isEmpty()){
+            alertManager.addAlert(new Alert("Wątek nie może być dodany bez określenia kategorii", Alert.AlertType.DANGER));
+            return "redirect:/error";
+        }
+
 
         model.addAttribute("atr_title", "Dodawanie Wątku");
+        model.addAttribute("category", categoryURL);
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
         return "ThreadCreation";
     }
@@ -118,14 +128,32 @@ public class ThreadsController {
     @PostMapping("/addThread")
     public String addThread(
             @Valid @ModelAttribute ThreadCUForm threadCUForm, BindingResult bindingResult,
+            @RequestParam("category") String categoryURL,
+            @AuthenticationPrincipal UserDetails userDetails,
             HttpServletResponse httpServletResponse,
             Model model
             )
     {
 
-        if (validationUtility.ConvertValidationErrors(bindingResult, alertManager)) {
-            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/kategoria/nr");
+        if (categoryURL==null || categoryURL.isEmpty()){
+            alertManager.addAlert(new Alert("Wątek nie może być dodany bez określenia kategorii", Alert.AlertType.DANGER));
+            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
             return "Blank";
+        }
+
+        if (validationUtility.ConvertValidationErrors(bindingResult, alertManager)) {
+
+            Pair<Boolean,Integer> creationResult = threadsService.createThread(categoryURL,userDetails.getUsername(),threadCUForm);
+            if(creationResult.a){
+                RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,
+                        "/thread/"+categoryURL+'/'+creationResult.b.toString());
+                return "Blank";
+            }
+            alertManager.addAlert(new Alert("Doszło do błędu podczas dodawania wątku !!! ", Alert.AlertType.DANGER));
+            RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/error");
+            return "Blank";
+
+
         }
 
         model.addAttribute("alerts",alertManager);
