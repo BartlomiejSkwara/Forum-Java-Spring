@@ -15,10 +15,11 @@ public class UserEntity  {
     public UserEntity(){
     }
 
-    public UserEntity( GrantedAuthorityEntity role, String password, String username, Date creationDate) {
+    public UserEntity( GrantedAuthorityEntity role, String password, String username, String email, Date creationDate) {
         this.authority = role;
         this.password = password;
         this.username = username;
+        this.email=email;
         this.creationDate = creationDate;
     }
 
@@ -35,6 +36,9 @@ public class UserEntity  {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "username")
     private String username;

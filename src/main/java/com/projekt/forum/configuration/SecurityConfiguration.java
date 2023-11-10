@@ -66,7 +66,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/editCategory/**").hasRole("admin")
                     .requestMatchers("/postMessage/**").hasAnyRole("admin","user")
                     .requestMatchers("/deleteThread/**").hasAnyRole("admin","user")
-                    .requestMatchers("/addThread").hasAnyRole("admin","user")
+                    .requestMatchers("/addThread/**").hasAnyRole("admin","user")
 
                     .anyRequest().permitAll();
             });
@@ -83,6 +83,8 @@ public class SecurityConfiguration {
             http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer
                     .ignoringRequestMatchers("/category/{categoryUrl}")
                     .ignoringRequestMatchers("/thread/{categoryUrl}/{threadId}")
+                    .ignoringRequestMatchers("/register")
+
             );
 
 //            http.httpBasic(httpSecurityHttpBasicConfigurer -> {httpSecurityHttpBasicConfigurer.})

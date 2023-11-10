@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Sort;
 
 public class CategoryFilterForm {
+
     @Min(value = 0, message = "Próbujesz dostać się na ujemną stronę !!!")
     private Integer currentPage;
     @NotNull(message = "Niepoprawny kierunek sortowania !!!")

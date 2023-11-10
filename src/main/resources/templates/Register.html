@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html th:replace="~{Layout/mainLayout :: layout(~{::title},~{::content},true)}" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title th:fragment="title">Login</title>
+</head>
+<body>
+
+<div th:fragment="content" class = "d-flex vw-100 vh-100 p-3 flex-column justify-content-center align-items-center " >
+
+    <div class= "text-center mx-auto dark mb-4">
+        <form th:action="@{/register}" method="post" id = "registerForm"
+            onsubmit="ajaxPostForm('registerForm','alertsComponent'); return false;">
+            <img class="mb-4 img-fluid" th:src="@{~/images/yuumbread.svg}" alt="" width="156" height="88">
+            <h1 class="h3 mb-4 fw-normal display-5">Rejestracja</h1>
+
+            <div class="form-floating mb-3">
+                <input type="login" class="form-control" name='loginParam' maxlength="20" id="loginInput" placeholder="Login"
+                       value="">
+                <label for="loginInput">Login</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" name='emailParam' maxlength="45" id="emailInput" placeholder="Email"
+                       value="">
+                <label for="emailInput">Email</label>
+            </div>
+
+            <div class="form-floating mb-5 is-invalid">
+                <input type="password" class="form-control" name='passwordParam' maxlength="45" id="passwordInput" placeholder="Password"
+                       value="">
+                <label for="passwordInput">Hasło</label>
+            </div>
+
+
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Zarejestruj</button>
+        </form>
+    </div>
+
+    <th:block th:insert="~{Components/alerts :: alertsDisplayer(${atr_alertManager},true)}">
+    </th:block>
+</div>
+</body>
+</html>

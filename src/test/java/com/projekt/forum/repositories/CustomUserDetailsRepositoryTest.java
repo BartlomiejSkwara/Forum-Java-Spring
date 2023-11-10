@@ -40,7 +40,7 @@ public class CustomUserDetailsRepositoryTest {
         authorityRepository.save(userRole);
         authorityRepository.save(adminRole);
 
-        UserEntity entity = userRepository.save(new UserEntity(userRole,"123","Krisent", date));
+        UserEntity entity = userRepository.save(new UserEntity(userRole,"123","Krisent","krisent@gmail.com", date));
 
 
         Assertions.assertNotNull(entity);
@@ -56,8 +56,8 @@ public class CustomUserDetailsRepositoryTest {
         Date date = DateUtility.getCurrentDate();
         authorityRepository.save(userRole);
         authorityRepository.save(adminRole);
-        userRepository.save(new UserEntity(userRole,"123","Krisent", date ));
-        userRepository.save(new UserEntity(adminRole,"23","admin", date ));
+        userRepository.save(new UserEntity(userRole,"123","Krisent","krisent@gmail.com", date ));
+        userRepository.save(new UserEntity(adminRole,"23","admin","admin@gmail.com", date ));
 
         Collection<UserEntity> users = userRepository.joinUsersWithRole();
 
