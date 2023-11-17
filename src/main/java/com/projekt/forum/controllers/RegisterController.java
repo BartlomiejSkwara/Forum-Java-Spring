@@ -57,9 +57,8 @@ public class RegisterController {
         model.addAttribute("alerts",alertManager);
         model.addAttribute("clear",true);
 
-        RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
 
+        RequestUtility.setupAjaxInsertionHeaders(httpServletResponse);
         return "Components/alerts :: alertsList";
     }
-
 }
