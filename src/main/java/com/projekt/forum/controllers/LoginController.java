@@ -2,32 +2,41 @@ package com.projekt.forum.controllers;
 
 import com.projekt.forum.dataTypes.Alert;
 import com.projekt.forum.dataTypes.AlertManager;
+import com.projekt.forum.services.JWTService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Arrays;
 
 @Controller
 public class LoginController {
 
 
     private final AlertManager alertManager;
+    private final JWTService jwtService;
     @Autowired
-    public LoginController(AlertManager alertManager){
+    public LoginController(AlertManager alertManager, JWTService jwtService){
         this.alertManager = alertManager;
+        this.jwtService = jwtService;
     }
 
 
     @RequestMapping("/loginSuccess")
-    public String loginSuccess(){
+    public String loginSuccess(HttpServletResponse httpServletResponse){
         alertManager.addAlert(new Alert("Zostałeś poprawnie zalogowany :>",Alert.AlertType.SUCCESS));
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+
+        String jwtToken = jwtService.generateJWT((UserDetails) securityContext.getAuthentication().getPrincipal());
+        jwtService.addTokenToResponse(httpServletResponse,jwtToken);
+
+
         return "redirect:/";
     }
     @GetMapping("/logout")
@@ -50,6 +59,7 @@ public class LoginController {
 
 
         }
+
         //TODO przenieś to tam gdzie trzeba
 //        else {
 //            alertManager.addAlert(new Alert("Poprawnie zalogowano Witaj :>", Alert.AlertType.SUCCESS));

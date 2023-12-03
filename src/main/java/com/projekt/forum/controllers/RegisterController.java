@@ -41,7 +41,7 @@ public class RegisterController {
 
 
         if (validationUtility.ConvertValidationErrors(bindingResult,alertManager)){
-            if (registerService.registerNewUser(registerForm)){
+            if (registerService.registerNewUser(registerForm,httpServletResponse)){
                 RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/");
                 alertManager.addAlert(new Alert("Rejestracja zakończona powodzeniem ! Witaj ".concat(registerForm.getLogin()), Alert.AlertType.SUCCESS));
             }
