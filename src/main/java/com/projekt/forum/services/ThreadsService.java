@@ -99,7 +99,7 @@ public class ThreadsService {
 
     @Transactional
     public Pair<Boolean,Integer> createThread(String categoryURL, String username, ThreadCUForm threadCUForm) {
-        Date date = DateUtility.getCurrentDate();
+        Date date = DateUtility.getCurrentDateWithoutZoneOffset();
 
         Optional<CategoryProjection> categoryProjection = categoryRepository.findCategoryProjectionByUrl(categoryURL);
         if(categoryProjection.isEmpty()){

@@ -81,10 +81,10 @@ public class MessageService {
     public boolean saveMessage(Integer threadId, String message, UserEntity userEntity, ThreadEntity currentThread){
 
 
-        MessageEntity messageEntity = new MessageEntity(null, DateUtility.getCurrentDate(),message,userEntity,currentThread);
+        MessageEntity messageEntity = new MessageEntity(null, DateUtility.getCurrentDateWithoutZoneOffset(),message,userEntity,currentThread);
         messageRepository.save(messageEntity);
         currentThread.setMessageCount(currentThread.getMessageCount()+1);
-        currentThread.setUpdateDate(DateUtility.getCurrentDate());
+        currentThread.setUpdateDate(DateUtility.getCurrentDateWithoutZoneOffset());
         threadRepository.save(currentThread);
 
 

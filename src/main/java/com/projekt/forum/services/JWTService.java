@@ -8,6 +8,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -79,8 +80,23 @@ public class JWTService {
     public void addTokenToResponse(HttpServletResponse httpServletResponse, String token){
         //httpServletResponse.addHeader("Authorization","Bearer ".concat(token));
         //httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,"jwt="+token+"; HttpOnly; Secure; SameSite=Strict");
-        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,"jwt="+token+"; HttpOnly; SameSite=Strict");
 
+        //ostatni
+        //httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,"jwt="+token+"; HttpOnly; SameSite=Strict");
+        //HttpHeaders.
+
+        Cookie cookie = new Cookie("jwt",token);
+        cookie.setHttpOnly(true);
+        //cookie.setMaxAge((60*9)+59);
+        cookie.setAttribute("SameSite","Strict");
+        cookie.setPath("/");
+        httpServletResponse.addCookie(cookie);
+    }
+
+    public void removeTokenCookie(HttpServletResponse httpServletResponse){
+        Cookie cookie = new Cookie("jwt","");
+        cookie.setMaxAge(0);
+        httpServletResponse.addCookie(cookie);
     }
 
 }

@@ -1,19 +1,20 @@
 package com.projekt.forum.configuration;
 
+import com.projekt.forum.dataTypes.Alert;
+import com.projekt.forum.dataTypes.AlertManager;
 import com.projekt.forum.services.JWTService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,10 +27,12 @@ import java.util.Optional;
 public class JWTAuthFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
+    private final AlertManager alertManager;
     private final UserDetailsService userDetailsService;
 
-    public JWTAuthFilter(JWTService jwtService, UserDetailsService userDetailsService) {
+    public JWTAuthFilter(JWTService jwtService, AlertManager alertManager, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
+        this.alertManager = alertManager;
         this.userDetailsService = userDetailsService;
     }
 
@@ -56,17 +59,31 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         try {
             final String username = jwtService.retrieveUsernameClaim(jwtToken);
             SecurityContext securityContext = SecurityContextHolder.getContext();
-            if (username!= null && securityContext.getAuthentication() == null){
+            if (username!= null && securityContext.getAuthentication() == null){// gdy nie ma username w tokenie i niezalogowany
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 if (jwtService.isTokenValid(userDetails, jwtToken)) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     securityContext.setAuthentication(usernamePasswordAuthenticationToken);
+
+
+                    ///TODO dokończ ten fragment coś się dziwnie dodaj ogólnie do innych adresów :> / path attribute się źle chyba dodaje czy coś idk
+                    String newJwtToken = jwtService.generateJWT(userDetails);
+                    jwtService.addTokenToResponse(response,newJwtToken);
+
+
                 }
             }
 
-        }catch (ExpiredJwtException expiredJwtException){
-            ///Obsługa wygaśnięcia tokenu
+        }catch (ExpiredJwtException | SignatureException expiredJwtException){
+            ///Obsługa wygaśnięcia tokenu lub złej sygnatury
+
+            //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            jwtService.removeTokenCookie(response);
+            alertManager.addAlert(new Alert("Twój token JWT wygasł :<", Alert.AlertType.WARNING));
+            response.sendRedirect("/");
+            //RequestUtility.setupAjaxRedirectionHeaders(response);
+
             filterChain.doFilter(request,response);
 
 
