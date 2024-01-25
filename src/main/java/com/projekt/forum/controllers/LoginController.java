@@ -3,9 +3,11 @@ package com.projekt.forum.controllers;
 import com.projekt.forum.dataTypes.Alert;
 import com.projekt.forum.dataTypes.AlertManager;
 import com.projekt.forum.services.JWTService;
+import com.projekt.forum.utility.RequestUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,8 +42,12 @@ public class LoginController {
         return "redirect:/";
     }
     @GetMapping("/logout")
-    public String logout(){
+    public String logout(HttpServletResponse httpServletResponse){
         alertManager.addAlert(new Alert("Zostałeś wylogowany :>",Alert.AlertType.WARNING));
+        jwtService.removeTokenCookie(httpServletResponse);
+
+        RequestUtility.setupAjaxRedirectionHeaders(httpServletResponse,"/");
+
         return "redirect:/";
     }
     @GetMapping("/login")
@@ -60,11 +66,7 @@ public class LoginController {
 
         }
 
-        //TODO przenieś to tam gdzie trzeba
-//        else {
-//            alertManager.addAlert(new Alert("Poprawnie zalogowano Witaj :>", Alert.AlertType.SUCCESS));
-//
-//        }
+
         model.addAttribute("atr_alertManager", alertManager);
 
         return "Login";

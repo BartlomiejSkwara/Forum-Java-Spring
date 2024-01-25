@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Controller
@@ -49,8 +51,6 @@ public class CategoryCRUDController {
 
         return "redirect:/";
     }
-
-
     @GetMapping(path = {"/editCategory","/editCategory/","/editCategory/{categoryURL}"})
     public String editCategoryGet(Model model, @RequestParam(name = "id", required = false) Integer categoryId){
 

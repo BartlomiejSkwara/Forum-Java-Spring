@@ -3,6 +3,7 @@ package com.projekt.forum.configuration;
 import com.projekt.forum.dataTypes.Alert;
 import com.projekt.forum.dataTypes.AlertManager;
 import com.projekt.forum.services.JWTService;
+import com.projekt.forum.utility.RequestUtility;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -39,6 +40,11 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException
     {
+        if(request.getCookies()==null){
+            filterChain.doFilter(request,response);
+            return;
+        }
+
         Optional<Cookie> jwtCookie = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("jwt")).findFirst();
         if (jwtCookie.isEmpty()){
             filterChain.doFilter(request,response);
@@ -67,7 +73,6 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                     securityContext.setAuthentication(usernamePasswordAuthenticationToken);
 
 
-                    ///TODO dokończ ten fragment coś się dziwnie dodaj ogólnie do innych adresów :> / path attribute się źle chyba dodaje czy coś idk
                     String newJwtToken = jwtService.generateJWT(userDetails);
                     jwtService.addTokenToResponse(response,newJwtToken);
 
@@ -75,16 +80,18 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                 }
             }
 
+
         }catch (ExpiredJwtException | SignatureException expiredJwtException){
             ///Obsługa wygaśnięcia tokenu lub złej sygnatury
 
             //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             jwtService.removeTokenCookie(response);
-            alertManager.addAlert(new Alert("Twój token JWT wygasł :<", Alert.AlertType.WARNING));
-            response.sendRedirect("/");
-            //RequestUtility.setupAjaxRedirectionHeaders(response);
+            alertManager.addAlert(new Alert("Zostałeś automatycznie wylogowany ponieważ twój token JWT wygasł :<", Alert.AlertType.DANGER));
 
-            filterChain.doFilter(request,response);
+            //request.getRequestURI()
+            //request.setAttribute(RequestUrl);
+            //response.sendRedirect("/");
+            //RequestUtility.setupAjaxRedirectionHeaders(response);
 
 
         }

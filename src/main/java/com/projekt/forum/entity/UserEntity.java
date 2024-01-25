@@ -52,8 +52,6 @@ public class UserEntity  {
         return authority;
     }
 
-
-
     public Date getCreationDate() {
         return creationDate;
     }
